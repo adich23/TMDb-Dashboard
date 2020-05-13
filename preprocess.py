@@ -10,32 +10,34 @@ def findGenres(data):
     movie_genres = [] 
     
     for movie_index, movie_data in data.iterrows():
-        genres = movie_data["genres"]
-     
-        for genre in genres:
-        	if genre not in all_genres:
-        		all_genres.append(genre)
-
+        genres = movie_data["genres"][1:-1].replace("'","").replace(" ","")
+#         print(genres)
+        for genre in genres.split(','):
+                all_genres.append(genre)
+            
+    all_genres = list(set(all_genres))
+    all_genres.remove("")
     return all_genres
 
-
 def buildGenreMovieMapper(data):
-	genreMovieMapper = {}
+    genreMovieMapper = {}
 
-	for genre in ALL_GENRES:
-		genreMovieMapper[genre] = []
+    for genre in ALL_GENRES:
+        genreMovieMapper[genre] = []
 
-	for movie_index, movie_data in data.iterrows():
-		genres = movie_data["genres"]
+    for movie_index, movie_data in data.iterrows():
+        genres = movie_data["genres"][1:-1].replace("'","").replace(" ","")
+        
+        movie_title = movie_data["original_title"]
 
-		movie_title = data["original_title"]
+        for genre in genres.split(','): 
+            if genre == "":
+                continue
+            movie_list = genreMovieMapper[genre]
+            movie_list.append(movie_title)
+            genreMovieMapper[genre] = movie_list
 
-		for genre in genres: 
-			movie_list = genreMovieMapper[genre]
-			movie_list.append(movie_title)
-			genreMovieMapper[genre] = movie_list
-
-	return genreMovieMapper
+    return genreMovieMapper
 
 
 def buildMovieDetailsMapper(data):
