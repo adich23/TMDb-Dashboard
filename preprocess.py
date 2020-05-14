@@ -1,44 +1,109 @@
 import pandas as pd
 import numpy as np
 import json
+import math
 import ast # This module is for converting stringified list representation (after reading from csv) into an actual Python list format
-
 
 def findGenres(data):
     # Gathering a list of different genres available in the data
     all_genres = []
     movie_genres = [] 
-    
+
     for movie_index, movie_data in data.iterrows():
-        genres = movie_data["genres"][1:-1].replace("'","").replace(" ","")
-#         print(genres)
-        for genre in genres.split(','):
-                all_genres.append(genre)
-            
-    all_genres = list(set(all_genres))
-    all_genres.remove("")
+        genres = movie_data["genres"]
+
+        for genre in genres:
+        	if genre not in all_genres:
+        		all_genres.append(genre)
+
     return all_genres
 
+
 def buildGenreMovieMapper(data):
-    genreMovieMapper = {}
+	genreMovieMapper = {}
 
-    for genre in ALL_GENRES:
-        genreMovieMapper[genre] = []
+	for genre in ALL_GENRES:
+		genreMovieMapper[genre] = []
 
-    for movie_index, movie_data in data.iterrows():
-        genres = movie_data["genres"][1:-1].replace("'","").replace(" ","")
-        
-        movie_title = movie_data["original_title"]
+	for movie_index, movie_data in data.iterrows():
+		genres = movie_data["genres"]
 
-        for genre in genres.split(','): 
-            if genre == "":
-                continue
-            movie_list = genreMovieMapper[genre]
-            movie_list.append(movie_title)
-            genreMovieMapper[genre] = movie_list
+		movie_title = data["original_title"]
 
-    return genreMovieMapper
+		for genre in genres: 
+			movie_list = genreMovieMapper[genre]
+			movie_list.append(movie_title)
+			genreMovieMapper[genre] = movie_list
 
+	return genreMovieMapper
+
+
+# def findGenres(data):
+#     # Gathering a list of different genres available in the data
+#     all_genres = []
+#     movie_genres = [] 
+    
+#     for movie_index, movie_data in data.iterrows():
+#         genres = movie_data["genres"][1:-1]#.replace("'","").replace(" ","")
+#         print(genres)
+#         print("============")
+#         for genre in genres.split(','):
+#                 all_genres.append(genre)
+            
+#     all_genres = list(set(all_genres))
+#     all_genres.remove("")
+#     return all_genres
+
+# def buildGenreMovieMapper(data):
+# 	genreMovieMapper = {}
+
+# 	for genre in ALL_GENRES:
+# 		genreMovieMapper[genre] = []
+
+# 	for movie_index, movie_data in data.iterrows():
+# 		genres = movie_data["genres"][1:-1]
+# 		#.replace("'","").replace(" ","")
+# 		print(genres)
+# 		break
+# 		movie_title = movie_data["original_title"]
+
+# 		for genre in genres.split(','): 
+# 			if genre == "":
+# 				continue
+# 			movie_list = genreMovieMapper[genre]
+# 			movie_list.append(movie_title)
+# 			genreMovieMapper[genre] = movie_list
+
+# 	return genreMovieMapper
+
+def buildMoviesDf():
+	columns = ['name','budget','revenue','popularity','vote_average','no_genres','no_production_companies',
+          'no_keywords','no_production_countries','profit','runtime','release_date']
+
+	data_list = []
+	for key,val in MOVIE_DETAILS_MAPPER.items():
+		row  = [0]*12
+		if val['budget'] <= 0:
+			continue
+		if math.isnan(val['runtime']):
+			continue
+		row[0] = key
+		row[1] = val['budget']/1000000
+		row[2] = val['revenue']/1000000
+		row[3] = val['popularity']
+		row[4] = val['vote_average']
+		row[5] = len(val['genres'])#.split())
+		row[6] = len(val['production_companies'])#.split())
+		row[7] = len(val['keywords'])#.split())
+		row[8] = len(val['production_countries'])#.split())
+		row[9] = val['revenue'] - val['budget']
+		row[10] = val['runtime']
+		row[11] = val['release_date']
+		
+		data_list.append(row)
+	
+	data = pd.DataFrame(data_list, columns=columns)
+	return data
 
 def buildMovieDetailsMapper(data):
 	movieDetailsMapper = {}
@@ -56,6 +121,8 @@ def buildMovieDetailsMapper(data):
 		movie_data_dict["production_countries"] = movie_data["production_countries"]
 		movie_data_dict["revenue"] = movie_data["revenue"]
 		movie_data_dict["vote_average"] = movie_data["vote_average"]
+		movie_data_dict["runtime"] = movie_data["runtime"]
+		movie_data_dict["release_date"] = movie_data["release_date"]
         
 		movieDetailsMapper[movie_title] = movie_data_dict
 	
@@ -94,10 +161,12 @@ def preprocess_data():
 	global ALL_GENRES
 	global GENRE_MOVIE_MAPPER 
 	global MOVIE_DETAILS_MAPPER
+	global MOVIES_DF
 
 	ALL_GENRES = findGenres(data)
 	GENRE_MOVIE_MAPPER = buildGenreMovieMapper(data)
 	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
+	MOVIES_DF = buildMoviesDf()
 	
 	
 
