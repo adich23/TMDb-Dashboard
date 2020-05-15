@@ -11,7 +11,8 @@ def initialize():
 		or calling any other modules.
 		This module also renders the original HTML page. 
 	'''
-	draw_circular_biplot("CONSOLIDATED")
+	# draw_circular_biplot("CONSOLIDATED")
+	initialize_global_vars()
 	return render_template("index.html")
 
 
@@ -39,7 +40,18 @@ def draw_circular_biplot(type_to_display):
 	data = driver_fetch_data("circular_biplot", type_to_display)
 	return data.to_json(orient='records')
 
+@app.route("/draw2dScatterPlot/<type_to_display>", methods=['POST', 'GET'])
+def draw_2d_scatter_plot(type_to_display):
+	# print("ENTER")
+	data = driver_fetch_data("scatterplot", type_to_display)
+	return data.to_json(orient='records')
+
+@app.route("/drawBoxPlot/<type_to_display>", methods=['POST', 'GET'])
+def draw_box_plot(type_to_display):
+	data_dict = driver_fetch_data("boxplot", type_to_display)
+	return json.dumps(data_dict)
+
 
 if __name__ == "__main__":
-	initialize_global_vars()
+# 	initialize_global_vars()
 	app.run(debug=True)
