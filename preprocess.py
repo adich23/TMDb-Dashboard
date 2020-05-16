@@ -27,8 +27,7 @@ def buildGenreMovieMapper(data):
 
 	for movie_index, movie_data in data.iterrows():
 		genres = movie_data["genres"]
-
-		movie_title = data["original_title"]
+		movie_title = movie_data["original_title"]
 
 		for genre in genres: 
 			movie_list = genreMovieMapper[genre]
@@ -45,7 +44,7 @@ def buildMovieDetailsMapper(data):
 		movie_title = movie_data["original_title"]
 
 		movie_data_dict = {}
-        
+		
 		movie_data_dict["budget"] = movie_data["budget"]
 		movie_data_dict["genres"] = movie_data["genres"]
 		movie_data_dict["keywords"] = movie_data["keywords"]
@@ -54,7 +53,11 @@ def buildMovieDetailsMapper(data):
 		movie_data_dict["production_countries"] = movie_data["production_countries"]
 		movie_data_dict["revenue"] = movie_data["revenue"]
 		movie_data_dict["vote_average"] = movie_data["vote_average"]
-        
+		# Directly adding the revenue_budget_ratio here to avoid recalculating it. Can directly fetch it instead of fetching revenue and data
+		# and dividing them again. 
+		
+		movie_data_dict["revenue_budget_ratio"] = (movie_data["revenue"]/movie_data["budget"]) 
+
 		movieDetailsMapper[movie_title] = movie_data_dict
 	
 	return movieDetailsMapper
@@ -64,7 +67,8 @@ def preprocess_data():
 	'''
 	This method preprocesses the data and creates global variables for various mapper objects of ours.  
 	'''
-	data = pd.read_csv("movie_data.csv")
+	print("We're currently preprocessing data")
+	data = pd.read_csv("movie_data_updated.csv")
 	
 	genres_list = []
 	keywords_list = []
@@ -96,7 +100,7 @@ def preprocess_data():
 	ALL_GENRES = findGenres(data)
 	GENRE_MOVIE_MAPPER = buildGenreMovieMapper(data)
 	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
-	
-	
+
+	print("Done with preprocessing data")
 
 	

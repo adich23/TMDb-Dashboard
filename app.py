@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, Response, jsonify
 from functions_library import driver_fetch_data, initialize_global_vars # User defined consolidated library file. 
+import json
 
 app = Flask(__name__)
 
@@ -11,7 +12,13 @@ def initialize():
 		or calling any other modules.
 		This module also renders the original HTML page. 
 	'''
-	draw_circular_biplot("CONSOLIDATED")
+	
+	# We do not need to return anything from initialize_global_vars() function as we use it 
+	# only to call preprocess and other necessary functions
+	# This is only to make sure that all global var data is captured before any other functions are called
+	# And that's only possible if there's something to return, otherwise we're directly going to go to the next line.
+
+	stopTimer = initialize_global_vars() 
 	return render_template("index.html")
 
 
@@ -37,9 +44,9 @@ def draw_circular_biplot(type_to_display):
 	'''
 
 	data = driver_fetch_data("circular_biplot", type_to_display)
-	return data.to_json(orient='records')
+	return json.dumps(data)
 
 
 if __name__ == "__main__":
-	initialize_global_vars()
 	app.run(debug=True)
+	
