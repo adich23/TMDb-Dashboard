@@ -62,14 +62,38 @@ def fetchBoxPlotData(chart_type, type_to_display):
 		print(GENRE_MOVIE_MAPPER[type_to_display][:10])
 		print("============================")
 		data = data[data.name.isin(GENRE_MOVIE_MAPPER[type_to_display])]
-	year_dict = {}
-	year_dict['2011'] = list(data[data['year'] == '2011']['runtime'])[:100]
-	year_dict['2012'] = list(data[data['year'] == '2012']['runtime'])[:100]
-	year_dict['2013'] = list(data[data['year'] == '2013']['runtime'])[:100]
-	year_dict['2014'] = list(data[data['year'] == '2014']['runtime'])[:100]
-	year_dict['2015'] = list(data[data['year'] == '2015']['runtime'])[:100]
+	
+	year_dict_0 = {}
+	year_dict_0['2011'] = list(data[data['year'] == '2011']['popularity'])[:100]
+	year_dict_0['2012'] = list(data[data['year'] == '2012']['popularity'])[:100]
+	year_dict_0['2013'] = list(data[data['year'] == '2013']['popularity'])[:100]
+	year_dict_0['2014'] = list(data[data['year'] == '2014']['popularity'])[:100]
+	year_dict_0['2015'] = list(data[data['year'] == '2015']['popularity'])[:100]
 
-	return year_dict
+	year_dict_1 = {}
+	year_dict_1['2011'] = list(data[data['year'] == '2011']['runtime'])[:100]
+	year_dict_1['2012'] = list(data[data['year'] == '2012']['runtime'])[:100]
+	year_dict_1['2013'] = list(data[data['year'] == '2013']['runtime'])[:100]
+	year_dict_1['2014'] = list(data[data['year'] == '2014']['runtime'])[:100]
+	year_dict_1['2015'] = list(data[data['year'] == '2015']['runtime'])[:100]
+
+	return [year_dict_0, year_dict_1]
+
+def fetchParallelPlotData(chart_type, type_to_display):
+	
+	columns = ['name','year','budget','revenue','profit','runtime','popularity']#,'no_production_companies',]
+	data = MOVIES_DF[columns]
+	
+
+	if type_to_display.upper() != 'CONSOLIDATED':
+		data = data[data.name.isin(GENRE_MOVIE_MAPPER[type_to_display])][columns]
+		data = data[(data['year'] > '2010') & (data['year'] <= '2015')]
+		
+	else:
+		data = PARALLEL_DF
+	
+	# sample data on a strategy
+	return data.head(100)
 
 def driver_fetch_data(chart_type, type_to_display):
 	'''
@@ -104,13 +128,16 @@ def initialize_global_vars():
 	global GENRE_MOVIE_MAPPER
 	global MOVIE_DETAILS_MAPPER
 	global MOVIES_DF
-
+	global PARALLEL_DF
+	
 	preprocess.preprocess_data()
 
 	ALL_GENRES = preprocess.ALL_GENRES
 	GENRE_MOVIE_MAPPER = preprocess.GENRE_MOVIE_MAPPER
 	MOVIE_DETAILS_MAPPER = preprocess.MOVIE_DETAILS_MAPPER
 	MOVIES_DF = preprocess.MOVIES_DF
+	PARALLEL_DF = preprocess.PARALLEL_DF
+	
 	global BUDGETS
 	global REVENUES 
 
