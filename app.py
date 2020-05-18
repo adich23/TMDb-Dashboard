@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, Response, jsonify
 from functions_library import driver_fetch_data, initialize_global_vars # User defined consolidated library file. 
+import json
 
 app = Flask(__name__)
 
@@ -51,7 +52,11 @@ def draw_box_plot(type_to_display):
 	data_dict = driver_fetch_data("boxplot", type_to_display)
 	return json.dumps(data_dict)
 
+@app.route("/drawParallelPlot/<type_to_display>", methods=['POST', 'GET'])
+def draw_parallel_plot(type_to_display):
+	data = driver_fetch_data("parallelplot", type_to_display)
+	return data.to_json(orient='records')
+
 
 if __name__ == "__main__":
-# 	initialize_global_vars()
 	app.run(debug=True)
