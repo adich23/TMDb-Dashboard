@@ -96,14 +96,31 @@ def buildMoviesDf():
 		row[6] = len(val['production_companies'])#.split())
 		row[7] = len(val['keywords'])#.split())
 		row[8] = len(val['production_countries'])#.split())
-		row[9] = val['revenue'] - val['budget']
+		row[9] = (val['revenue'] - val['budget'])/1e6
+		if row[9] < -50:
+			continue
 		row[10] = val['runtime']
 		row[11] = val['release_date']
 		
 		data_list.append(row)
 	
 	data = pd.DataFrame(data_list, columns=columns)
+	data['year'] = data['release_date'].apply(lambda x: str(x)[:4])
 	return data
+
+def buildParallelDf(data):
+	columns = ['budget','revenue','profit','runtime','popularity','no_production_companies']
+	parallel_df = pd.DataFrame(columns=['name']+columns)
+	i=0
+
+	for genre in ALL_GENRES:
+		sum_data = data[data.name.isin(GENRE_MOVIE_MAPPER[genre])][columns]
+		sum_column = sum_data.mean(axis=0)
+		sum_column = sum_column.astype(int)
+		parallel_df.loc[i] = [genre]+list(sum_column)
+		i+=1
+	
+	return parallel_df
 
 def buildMovieDetailsMapper(data):
 	movieDetailsMapper = {}
@@ -162,11 +179,13 @@ def preprocess_data():
 	global GENRE_MOVIE_MAPPER 
 	global MOVIE_DETAILS_MAPPER
 	global MOVIES_DF
+	global PARALLEL_DF
 
 	ALL_GENRES = findGenres(data)
 	GENRE_MOVIE_MAPPER = buildGenreMovieMapper(data)
 	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
 	MOVIES_DF = buildMoviesDf()
+	PARALLEL_DF = buildParallelDf(MOVIES_DF)
 	
 	
 
