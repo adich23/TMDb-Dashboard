@@ -72,6 +72,25 @@ def draw_radar_chart(type_to_display):
 	return json.dumps(data)
 
 
+@app.route("/draw2dScatterPlot/<type_to_display>", methods=['POST', 'GET'])
+def draw_2d_scatter_plot(type_to_display):
+	# print("ENTER")
+	data = driver_fetch_data("scatterplot", type_to_display)
+	return data.to_json(orient='records')
+
+
+@app.route("/drawBoxPlot/<type_to_display>", methods=['POST', 'GET'])
+def draw_box_plot(type_to_display):
+	data_dict = driver_fetch_data("boxplot", type_to_display)
+	return json.dumps(data_dict)
+
+
+@app.route("/drawParallelPlot/<type_to_display>", methods=['POST', 'GET'])
+def draw_parallel_plot(type_to_display):
+	data = driver_fetch_data("parallelplot", type_to_display)
+	return data.to_json(orient='records')
+
+
 if __name__ == "__main__":
 	app.run(debug=True)
 	

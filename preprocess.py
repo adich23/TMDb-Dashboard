@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import json
 import ast # This module is for converting stringified list representation (after reading from csv) into an actual Python list format
-
+import math
 
 def findGenres(data):
     # Gathering a list of different genres available in the data
@@ -36,6 +36,52 @@ def buildGenreMovieMapper(data):
 
 	return genreMovieMapper
 
+def buildMoviesDf():
+	columns = ['name','budget','revenue','popularity','vote_average','no_genres','no_production_companies',
+          'no_keywords','no_production_countries','profit','runtime','release_date']
+
+	data_list = []
+	for key,val in MOVIE_DETAILS_MAPPER.items():
+		row  = [0]*12
+		if val['budget'] <= 0:
+			continue
+		if math.isnan(val['runtime']):
+			continue
+		row[0] = key
+		row[1] = val['budget']/1000000
+		row[2] = val['revenue']/1000000
+		row[3] = val['popularity']
+		row[4] = val['vote_average']
+		row[5] = len(val['genres'])#.split())
+		row[6] = len(val['production_companies'])#.split())
+		row[7] = len(val['keywords'])#.split())
+		row[8] = len(val['production_countries'])#.split())
+		row[9] = (val['revenue'] - val['budget'])/1e6
+		if row[9] < -50:
+			continue
+		row[10] = val['runtime']
+		row[11] = val['release_date']
+		
+		data_list.append(row)
+	
+	data = pd.DataFrame(data_list, columns=columns)
+	data['year'] = data['release_date'].apply(lambda x: str(x)[:4])
+	return data
+
+def buildParallelDf(data):
+	columns = ['budget','revenue','profit','runtime','popularity','no_production_companies']
+	parallel_df = pd.DataFrame(columns=['name']+columns)
+	i=0
+
+	for genre in ALL_GENRES:
+		sum_data = data[data.name.isin(GENRE_MOVIE_MAPPER[genre])][columns]
+		sum_column = sum_data.mean(axis=0)
+		sum_column = sum_column.astype(int)
+		parallel_df.loc[i] = [genre]+list(sum_column)
+		i+=1
+	
+	return parallel_df
+
 
 def buildMovieDetailsMapper(data):
 	movieDetailsMapper = {}
@@ -54,6 +100,7 @@ def buildMovieDetailsMapper(data):
 		movie_data_dict["revenue"] = movie_data["revenue"]
 		movie_data_dict["vote_average"] = movie_data["vote_average"]
 		movie_data_dict["runtime"] = movie_data["runtime"]
+		movie_data_dict["release_date"] = movie_data["release_date"]
 		# Directly adding the revenue_budget_ratio here to avoid recalculating it. Can directly fetch it instead of fetching revenue and data
 		# and dividing them again. 
 		
@@ -97,10 +144,14 @@ def preprocess_data():
 	global ALL_GENRES
 	global GENRE_MOVIE_MAPPER 
 	global MOVIE_DETAILS_MAPPER
+	global MOVIES_DF
+	global PARALLEL_DF
 
 	ALL_GENRES = findGenres(data)
 	GENRE_MOVIE_MAPPER = buildGenreMovieMapper(data)
 	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
+	MOVIES_DF = buildMoviesDf()
+	PARALLEL_DF = buildParallelDf(MOVIES_DF)
 
 	print("Done with preprocessing data")
 

@@ -345,6 +345,13 @@ function draw_radarChartConsolidated(data, divID) {
 			  .on("mousedown", function(d, i) {
             	driver_radarChart("/drawRadarChart/" + d, "SPECIFIC", divID);
             	driver_circularBiPlot("/drawCircularBiPlot/" + d, "SPECIFIC", "chart_2_circularBiPlot");
+            	var category = d;//'Science Fiction';
+
+				plot_scatter('/draw2dScatterPlot/'+category,category);
+
+				plot_boxplot('/drawBoxPlot/'+category,category);
+				// always call box-plot first
+				plot_parallelplot('/drawParallelPlot/'+category,category);
         	});
 		}
 

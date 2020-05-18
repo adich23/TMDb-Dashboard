@@ -107,6 +107,11 @@ function draw_circularBiPlotConsolidated(data, divID) {
         .on("mousedown", function(d, i,) {
             driver_circularBiPlot("/drawCircularBiPlot/" + d.genre, "SPECIFIC", divID);
             driver_radarChart("/drawRadarChart/" + d.genre, "SPECIFIC", "chart_1_radarChart");
+            var category = d.genre;
+            plot_scatter('/draw2dScatterPlot/'+category,category);
+            plot_boxplot('/drawBoxPlot/'+category,category);
+            // always call box-plot first
+            plot_parallelplot('/drawParallelPlot/'+category,category);
         });
 
 

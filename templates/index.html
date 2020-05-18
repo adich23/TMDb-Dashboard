@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <!-- d3 library -->
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
+        <!-- Custom JS functions -->
+        <script  src="{{url_for('static', filename='buildCircularBarChart.js')}}"></script>
+        <script  src="{{url_for('static', filename='buildRadarChart.js')}}"></script>
+        <!-- Custom CSS styles -->
+        <link rel="stylesheet" media="all" href="{{url_for('static', filename='mystyle.css')}}">
+        <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3-scale-radial.js"></script>
+    
+
+        <style>
+        svg {
+        font: 10px sans-serif;
+        padding: 10px;
+        }
+
+        .axis,
+        .frame {
+        shape-rendering: crispEdges;
+        }
+
+        .axis line,.axis path  {
+        fill: none;
+        stroke: #ddd;
+        shape-rendering: crispEdges;
+        }
+
+        /* .axis path {
+        display: none;
+        } */
+
+        .cell text {
+        font-weight: bold;
+        text-transform: capitalize;
+        fill: black;
+        }
+
+        .frame {
+        fill: none;
+        stroke: #aaa;
+        }
+
+        circle {
+        fill-opacity: .7;
+        }
+
+        circle.hidden {
+        fill: #ccc !important;
+        }
+
+        .tooltip4 {
+            position: absolute;
+            font-size: 12px;
+            width:  auto;
+            height: auto;
+            pointer-events: none;
+            background-color: white;
+        }
+
+        .extent {
+        fill: #000;
+        fill-opacity: .125;
+        stroke: #fff;
+        }
+
+        h1, h2 {
+        margin-top: 0;
+        margin-bottom: 0;
+        color: DarkOrange  ;
+        font-family: verdana;
+        border: 3px solid Teal  ;
+    
+        }
+
+        .row {
+            transform: translate(0px, 0px);
+        }
+
+        .dropdown1{
+            margin-left: 100px;
+            float: left;
+        }
+
+        .dropdown2{
+            margin-left: 50px;
+            float: left;
+        }
+
+        .x.axis2 line,
+        .x.axis2 path {
+        fill: none;
+        stroke: #000;
+        }
+
+        .y.axis2 line,
+        .y.axis2 path {
+        fill: none;
+        stroke: #000;
+        }
+
+        .background path {
+        fill: none;
+        stroke: #ddd;
+        shape-rendering: crispEdges;
+        }
+
+        .foreground path {
+        fill: none;
+        stroke: #b44682;
+        }
+
+        .brush .extent {
+        fill-opacity: .3;
+        stroke: #fff;
+        shape-rendering: crispEdges;
+        }
+
+        .axis line,
+        .axis path {
+        fill: none;
+        stroke: #000;
+        shape-rendering: crispEdges;
+        }
+
+        .axis text {
+            fill:black;
+        text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff;
+        }
+        pre {
+        width: 100%;
+        height: 300px;
+        margin: 6px 12px;
+        tab-size: 40;
+        font-size: 10px;
+        overflow: auto;
+        }
+                
+    </style>
+    </head>      
+
+<body>
+        
+        <div class="container-fluid">
+            <p class="lead text-primary text-center h1">
+                CSE 564 Visualization. 
+                <br>
+                Professor: Klaus Mueller. 
+            
+            </p>
+            <hr>
+            <p class="lead text-primary text-right h4">
+                Names
+                IDs
+            </p>
+            
+            <hr>
+            
+            <div class="data_desc jumbotron well">
+                <p class="text-justify border-success rounded text-success " style="text-align:center;">
+                    Dataset Description:
+                </p>
+            </div>
+            <hr>
+
+            <div class="container-fluid">
+                    <div class="container-fluid">
+                        <div id="button_holder">
+                            <button type="button" class="btn btn-outline-primary" onclick="callAllConsolidatedFunctions()">RESET</button>
+                        </div>
+                    </div>
+                    <div class="container-fluid">
+                        <div id="chart_1_radarChart">
+                            <button type="button" class="btn btn-primary" onclick="driver_radarChart('/drawRadarChart/cat1', 'GROUPED', 'chart_1_radarChart')">Category-1</button>
+                            <button type="button" class="btn btn-primary" onclick="driver_radarChart('/drawRadarChart/cat2', 'GROUPED', 'chart_1_radarChart')">Category-2</button>
+                            <button type="button" class="btn btn-primary" onclick="driver_radarChart('/drawRadarChart/cat3', 'GROUPED', 'chart_1_radarChart')">Category-3</button>
+                            <button type="button" class="btn btn-primary" onclick="driver_radarChart('/drawRadarChart/cat4', 'GROUPED', 'chart_1_radarChart')">Category-4</button>
+                            Radar Chart
+                        </div>
+                    </div>
+
+                    <div class="container-fluid">
+                        <div id="buttons_for_circularBiPlot">
+                            <button type="button" class="btn btn-outline-primary" onclick="driver_radarChart('/drawRadarChart/top10', 'SPECIFIC', 'chart_1_radarChart')">Show Top-10% of the Data</button>
+                            <button type="button" class="btn btn-outline-primary" onclick="driver_radarChart('/drawRadarChart/mid10', 'SPECIFIC', 'chart_1_radarChart')">Show Mid-10% of the Data</button>
+                            <button type="button" class="btn btn-outline-primary" onclick="driver_radarChart('/drawRadarChart/bottom10', 'SPECIFIC', 'chart_1_radarChart')">Show Bottom-10% of the Data</button>
+                        </div>
+
+                        <div id="chart_2_circularBiPlot">
+                            Circular BiPlot
+                        </div>
+                   </div>                        
+
+                    <div id="radarChart" style="display: inline-flex;"></div>
+                    <div id="radarChart2" style="display: inline-flex;"></div>         
+            </div>
+            <div id="div4"></div>
+            <div id="div5">
+                <form>
+                    <!-- <input type="radio" name="choice" value="0"  checked> Popularity 
+                    <input type="radio" name="choice" value="1"> Runtime  -->
+                    <input type="button" id="btn" value="Popularity">
+                    <input type="button" id="btn_1" value="Runtime">
+                </form>
+
+
+            </div>
+            <div id="div6"></div>
+
+              <!-- Load d3.js -->
+              <div id = "error"></div>
+              <script src="{{ url_for('static', filename='d3.v4.min.js')}}"></script> 
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
+              <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+              <script src = "{{ url_for('static', filename='part1.js')}}"></script>   
+            
+
+            <script>
+               
+                function callAllConsolidatedFunctions() {
+                    driver_radarChart("/drawRadarChart/CONSOLIDATED", "CONSOLIDATED", "chart_1_radarChart");
+                    driver_circularBiPlot("/drawCircularBiPlot/CONSOLIDATED", "CONSOLIDATED", "chart_2_circularBiPlot");
+                    
+                    var category="CONSOLIDATED";
+                    
+                    plot_scatter('/draw2dScatterPlot/'+category, category);
+                    plot_boxplot('/drawBoxPlot/'+category, category);
+                    // always call box-plot first
+                    plot_parallelplot('/drawParallelPlot/'+category, category);
+
+                }
+                callAllConsolidatedFunctions()
+              
+            </script>
+        </div>
+    </body>
+</html>
