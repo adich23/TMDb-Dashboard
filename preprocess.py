@@ -53,6 +53,7 @@ def buildMovieDetailsMapper(data):
 		movie_data_dict["production_countries"] = movie_data["production_countries"]
 		movie_data_dict["revenue"] = movie_data["revenue"]
 		movie_data_dict["vote_average"] = movie_data["vote_average"]
+		movie_data_dict["runtime"] = movie_data["runtime"]
 		# Directly adding the revenue_budget_ratio here to avoid recalculating it. Can directly fetch it instead of fetching revenue and data
 		# and dividing them again. 
 		

@@ -47,6 +47,31 @@ def draw_circular_biplot(type_to_display):
 	return json.dumps(data)
 
 
+@app.route("/drawRadarChart/<type_to_display>", methods=['POST', 'GET'])
+def draw_radar_chart(type_to_display):
+	'''
+	This module receives input from the Ajax driver function (myscript.js) and is used to draw
+	the Radar Chart to plot all numeric components for consolidated genre-specific data 
+	and for various movies in the genre.
+	It calls the Python method driver_fetch_data with arguments radar_plot and type_to_display 
+	to retrieve relevant data. 
+
+	Input: 
+		type_to_display - A string keyword that is used to specify what kind of data is to be 
+		displayed in the graph. 
+		Values could be 'CONSOLIDATED' or the name of the genre. 
+	
+	Output: 
+		If 'type_to_display' is CONSOLIDATED, we send the aggregated budget/revenue across all
+		available genres.
+		If 'type_to_display' is the name of the genre, we send the [1-10, 45-55, 90-100] ranged 
+		values in revenue/budget sorted list. 
+	'''
+
+	data = driver_fetch_data("radar_plot", type_to_display)
+	return json.dumps(data)
+
+
 if __name__ == "__main__":
 	app.run(debug=True)
 	
