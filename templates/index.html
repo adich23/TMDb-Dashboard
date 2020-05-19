@@ -36,7 +36,7 @@
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/js/bootstrap.min.js"></script>
         <!-- MDB core JavaScript -->
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.18.0/js/mdb.min.js"></script>
-
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" /> 
         <style>
         svg {
         font: 10px sans-serif;
@@ -175,18 +175,8 @@
           grid-auto-rows: 400px; 
         }
 
-        .box1 { 
-          grid-column-start: 1; 
-          grid-column-end: 4; 
-          grid-row-start: 1; 
-          grid-row-end: 3; 
-        }
-
-        .box2 { 
-          grid-column-start: 1; 
-          grid-row-start: 3; 
-          grid-row-end: 5; 
-        }  
+        div.ext-box { display: table; width:100%;}
+        div.int-box { display: table-cell; vertical-align: middle; }  
     </style>
     </head>      
 
@@ -215,16 +205,15 @@
             <hr>
         </div>
 
-        <button onclick="callAllConsolidatedFunctions()"> RESET </button>
-
         <div class="wrapper1">
             <div id="chart_1_radarChart" style="background-color: #eee">
-                <button type="button" class="btn btn-primary" onclick="driver_radarChart('/drawRadarChart/cat1', 'GROUPED', 'chart_1_radarChart')">Category-1</button>
-                <button type="button" class="btn btn-primary" onclick="driver_radarChart('/drawRadarChart/cat2', 'GROUPED', 'chart_1_radarChart')">Category-2</button>
-                <button type="button" class="btn btn-primary" onclick="driver_radarChart('/drawRadarChart/cat3', 'GROUPED', 'chart_1_radarChart')">Category-3</button>
-                <button type="button" class="btn btn-primary" onclick="driver_radarChart('/drawRadarChart/cat4', 'GROUPED', 'chart_1_radarChart')">Category-4</button>
-                Radar Chart
+                <button class="btn btn-secondary btn-lg" onclick="callAllConsolidatedFunctions()"> RESET </button>
+                <button type="button" class="btn btn-primary btn-lg" onclick="driver_radarChart('/drawRadarChart/cat1', 'GROUPED', 'chart_1_radarChart')">Category-1</button>
+                <button type="button" class="btn btn-primary btn-lg" onclick="driver_radarChart('/drawRadarChart/cat2', 'GROUPED', 'chart_1_radarChart')">Category-2</button>
+                <button type="button" class="btn btn-primary btn-lg" onclick="driver_radarChart('/drawRadarChart/cat3', 'GROUPED', 'chart_1_radarChart')">Category-3</button>    
+                <button type="button" class="btn btn-primary btn-lg" onclick="driver_radarChart('/drawRadarChart/cat4', 'GROUPED', 'chart_1_radarChart')">Category-4</button>
             </div>
+            
 
             <div id="div6" style="background-color: #bbb">
                 
@@ -232,20 +221,31 @@
         </div>
         <div class="wrapper2">
             <div  id="chart_2_circularBiPlot" style="background-color: #ddd">
-                <button type="button" class="btn btn-outline-primary" id="top10"> Show Top-10% of the Data </button>
-                <button type="button" class="btn btn-outline-primary" id="mid10"> Show Mid-10% of the Data </button>
-                <button type="button" class="btn btn-outline-primary" id="bottom10"> Show Bottom-10% of the Data </button>
-                  Circular BiPlot
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-lg" id="top10">Top-10%</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-lg" id="mid10">Mid-10%</button>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-primary btn-lg" id="bottom10">Bottom-10%</button>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>   
             </div>
             
-            <div class="box4" id="div5" style="background-color: #abe">
-                <form>
-                    <input type="button" id="btn" value="Popularity">
-                    <input type="button" id="btn_1" value="Runtime">
-                </form>
+            <div id="div5" style="background-color: #abe">
+                
+                <button type="button" class="btn btn-outline-primary" id="btn" value="Popularity">Popularity</button>
+                <button type="button" class="btn btn-outline-primary" id="btn_1" value="Runtime">Runtime</button>
+                
             </div>
 
-            <div class="box5" id="div4" style="background-color: #cce"></div>
+            <div id="div4" style="background-color: #cce"></div>
         </div>
          <script  src="{{url_for('static', filename='myscript.js')}}"></script>
          <script>
@@ -263,14 +263,6 @@
                 callAllConsolidatedFunctions()             
         </script>
       </div>
-        <!--
-        <div style="height: 100px; background-color: rgba(255,0,0,0.1);">
-        <div class="h-75 w-50 d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height 25%</div>
-        <div class="h-50 d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height 50%</div>
-        <div class="h-75 d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height 75%</div>
-        <div class="h-100 d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height 100%</div>
-        <div class="h-auto d-inline-block" style="width: 120px; background-color: rgba(0,0,255,.1)">Height auto</div>
-        <-->
       
     </body>
 </html>

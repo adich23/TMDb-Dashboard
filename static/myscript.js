@@ -402,8 +402,8 @@ function draw_radarChartConsolidated(data, divID) {
             },
             levels: 3,
             maxValue: 0,            //What is the value that the biggest circle will represent
-            labelFactor: 1.25,  //How much farther than the radius of the outer circle should the labels be placed
-            wrapWidth: 60,      //The number of pixels after which a label needs to be given a new line
+            labelFactor: 1.18,  //How much farther than the radius of the outer circle should the labels be placed
+            wrapWidth: 0,      //The number of pixels after which a label needs to be given a new line
             opacityArea: 0.35,  //The opacity of the area of the blob
             dotRadius: 4,           //The size of the colored circles of each blog
             opacityCircles: 0.1,    //The opacity of the circles of each blob
@@ -532,15 +532,10 @@ function draw_radarChartConsolidated(data, divID) {
             .attr("text-anchor", "middle")
             .attr("dy", "0.35em")
             .attr("x", (d,i) => rScale(maxValue * cfg.labelFactor) * cos(angleSlice * i - HALF_PI))
-            .attr("y", (d,i) => rScale(maxValue * cfg.labelFactor) * sin(angleSlice * i - HALF_PI))
+            .attr("y", (d,i) => rScale(maxValue * cfg.labelFactor) * sin(angleSlice * i - HALF_PI)-20)
             .text(d => d)
             .call(wrap, cfg.wrapWidth);
 
-        /////////////////////////////////////////////////////////
-        ///////////// Draw the radar chart blobs ////////////////
-        /////////////////////////////////////////////////////////
-
-        //The radial line function
         const radarLine = d3.radialLine()
             .curve(d3.curveLinearClosed)
             .radius(d => rScale(d.value))
@@ -695,21 +690,20 @@ function draw_radarChartConsolidated(data, divID) {
         return svg;
     } //RadarChart function closed
 
-    var margin = { top: 50, right: 80, bottom: 50, left: 80 },
-                width = 700 //Math.min(700, window.innerWidth / 4) - margin.left - margin.right,
-                height = 700//Math.min(width, window.innerHeight - margin.top - margin.bottom);
+    var margin = { top: 30, right: 80, bottom: 50, left: 80 },
+                width = 300 //Math.min(700, window.innerWidth / 4) - margin.left - margin.right,
+                height = 300//Math.min(width, window.innerHeight - margin.top - margin.bottom);
 
     var radarChartOptions2 = {
-      w: 290,
-      h: 350,
+      w: 250,
+      h: 270,
       margin: margin,
       maxValue: 60,
       levels: 6,
       roundStrokes: true,
       color: d3.scaleOrdinal().range(['#a6cee3','#1f78b4','#b2df8a','#33a02c','#fb9a99','#e31a1c','#fdbf6f','#ff7f00','#cab2d6','#6a3d9a','#ffff99','#b15928']),
-        format: '.0f',
-        legend: {title: 'Genres', translateX: 180, translateY: 80},
-        unit: '$'
+      format: '.0f',
+      legend: {title: 'Genres', translateX: 220, translateY: 20},
     };
 
     let svg_radar2 = RadarChart(divID, data, radarChartOptions2);
@@ -753,6 +747,7 @@ function driver_radarChart(endPointAddr, tag, divID) {
     });
 }
 
+var category = genreOnDemand;
 var boxplot_data;
 
 const btn = document.querySelector('#btn');
@@ -1053,13 +1048,6 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
     // .domain(years_list);
     // Extract the list of dimensions and create a scale for each.
     x.domain(dimensions = d3.keys(sample_data[0]).filter(function(d) {
-        
-        // if (d == 'year') {
-        //     return y[d] = d3.scalePoint()
-        //     .domain(years_list)
-        //     // .domain(d3.extent(sample_data, function(p) { p[d]; }))
-        //     .range([0,height]);
-        // }
         if (d == "year") {
             return (y[d] = d3.scaleLinear()
             .domain(d3.extent(sample_data, function(p) { return parseInt(p[d]); }))
@@ -1070,17 +1058,9 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
             .domain(d3.extent(sample_data, function(p) { return +p[d]; }))
             .range([height, 0]));
         }
-        // return d != "name" && (y[d] = d3.scaleLinear()
-        //     .domain(d3.extent(sample_data, function(p) { return +p[d]; }))
-        //     .range([height, 0]));
+
     }));
 
-    // y['year'] = d3.scalePoint()
-    // .domain(years_list)
-    // .range([0, height]);
-
-    // Add the tooltip container to the vis container
-    // it's invisible and its position/contents are defined during mouseover
     var tooltip = d3.select(div).append("div")
         .attr("class", "tooltip4")
         .style("opacity", 0);
