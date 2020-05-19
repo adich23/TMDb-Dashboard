@@ -21,7 +21,7 @@ def findGenres(data):
 
 def buildGenreMovieMapper(data):
 	genreMovieMapper = {}
-
+	print(ALL_GENRES)
 	for genre in ALL_GENRES:
 		genreMovieMapper[genre] = []
 
@@ -29,7 +29,7 @@ def buildGenreMovieMapper(data):
 		genres = movie_data["genres"]
 		movie_title = movie_data["original_title"]
 
-		for genre in genres: 
+		for genre in genres:
 			movie_list = genreMovieMapper[genre]
 			movie_list.append(movie_title)
 			genreMovieMapper[genre] = movie_list
@@ -44,16 +44,16 @@ def buildMoviesDf():
 	data_list = []
 	for key,val in MOVIE_DETAILS_MAPPER.items():
 		row  = [0]*12
-		if val['budget'] <= 0:
+		if val['budget'] <= 0 or val['revenue'] <=0 :
 			continue
 		if math.isnan(val['runtime']):
 			continue
 		row[0] = key
-		row[1] = val['budget']/1000000
-		row[2] = val['revenue']/1000000
+		row[1] = val['budget']/1e6
+		row[2] = val['revenue']/1e6
 		row[3] = val['popularity']
-		if row[3] > 600:
-			continue
+		# if row[3] > 600:
+		# 	continue
 		row[4] = val['vote_average']
 		row[5] = len(val['genres'])#.split())
 		row[6] = len(val['production_companies'])#.split())
@@ -78,10 +78,12 @@ def buildParallelDf(data):
 	columns = ['budget','revenue','profit','runtime','popularity','no_production_companies']
 	parallel_df = pd.DataFrame(columns=['name']+columns)
 	i=0
-
+	# print(data.head(5))
 	for genre in ALL_GENRES:
 		sum_data = data[data.name.isin(GENRE_MOVIE_MAPPER[genre])][columns]
+		# print(sum_data.head(5))
 		sum_column = sum_data.mean(axis=0)
+		# print(sum_column,"======",genre)
 		sum_column = sum_column.astype(int)
 		parallel_df.loc[i] = [genre]+list(sum_column)
 		i+=1
@@ -121,6 +123,7 @@ def preprocess_data():
 	This method preprocesses the data and creates global variables for various mapper objects of ours.  
 	'''
 	print("We're currently preprocessing data")
+
 	data = pd.read_csv("movie_data.csv")
 	
 	genres_list = []
@@ -173,8 +176,7 @@ def preprocess_data():
 	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
 	MOVIES_DF = buildMoviesDf()
 	PARALLEL_DF = buildParallelDf(MOVIES_DF)
-	
-	
+		
 	print("Done with preprocessing data")
 
 	

@@ -765,7 +765,7 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     
     // set the dimensions and margins of the graph
     d3.select('#chart'+divId).remove();
-    var margin = {top: 20, right: 20, bottom: 50, left: 20},
+    var margin = {top: 20, right: 20, bottom: 50, left: 40},
     width = 500 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;    
   
@@ -979,7 +979,7 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
 
     svg.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", -30)
+      .attr("y", 0)
       .attr("x",0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
@@ -1004,9 +1004,9 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
     
     d3.select('#parallel'+divId).remove();
 
-    var margin = {top: 30, right: 10, bottom: 10, left: 10};
-    var width = 960 - margin.left - margin.right;
-    var height = 390 - margin.top - margin.bottom;
+    var margin = {top: 30, right: 10, bottom: 5, left: 10};
+    var width = 860 - margin.left - margin.right;
+    var height = 350 - margin.top - margin.bottom;
 
     sample_data = JSON.parse(dfData)
 
@@ -1051,12 +1051,12 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
         if (d == "year") {
             return (y[d] = d3.scaleLinear()
             .domain(d3.extent(sample_data, function(p) { return parseInt(p[d]); }))
-            .range([height, 0]));
+            .range([height-30, 0]));
         }
-        if (d !="name" && d!= "year") {
+        if (d !="name" && d!= "year" && d!= "rb_ratio") {
             return (y[d] = d3.scaleLinear()
             .domain(d3.extent(sample_data, function(p) { return +p[d]; }))
-            .range([height, 0]));
+            .range([height-30, 0]));
         }
 
     }));
@@ -1177,16 +1177,28 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
             });
             // Only render rows that are active across all selectors
             if(isActive) selected.push(d);
+            if (chartTitle != 'CONSOLIDATED') {
+                update(selected, chartTitle);
+            }
             return (isActive) ? null : "none";
         });
     }
 }
 
+function update(selectedData,chartTitle) {
+    draw_scatter_2d(selectedData, chartTitle,'div4','1')
+}
 
-function draw_scatter_2d(dfData, chartTitle,divId) {
+function draw_scatter_2d(dfData, chartTitle,divId,isBrush='0') {
 
     d3.select('#chart'+divId).remove();
-    var data = JSON.parse(dfData);
+    if (isBrush != '1') {
+        var data = JSON.parse(dfData);
+    }
+    else {
+        var data = dfData;
+    }
+    // var data = JSON.parse(dfData);
     
     var margin = {top: 20, right: 60, bottom: 60, left: 40},
     width = 460 - margin.left - margin.right,
@@ -1276,7 +1288,7 @@ var svg = d3.select(div).append("svg").attr('id', 'chart'+divId)
       .on("mouseout", tipMouseout);
 
   var legend = svg.selectAll(".legend")
-      .data(color.domain())
+      .data(color.domain().reverse())
     .enter().append("g")
       .attr("class", "legend")
       .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });

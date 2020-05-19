@@ -273,18 +273,42 @@ def get_rb_ratio(row):
 		return 2
 	else:
 		return 1
-def filter_rb_ratio(data):
-	a = data[data['rb_quantile'] <=0.1]
-	a['rb_ratio'] = 1
-	
-	size = data[(data['rb_quantile'] >=0.45) & (data['rb_quantile'] <=0.55)].shape[0]
-	c = data[(data['rb_quantile'] >0.2) & (data['rb_quantile'] <=0.8)].sample(size)
-	c['rb_ratio'] = 2
-	
-	b = data[data['rb_quantile'] >=0.9]
-	b['rb_ratio'] = 3
 
-	return pd.concat([a,c,b])
+
+def filter_rb_ratio(data):
+	print("==========In FIlter Funciton=========")
+	data = data[(data['year'] > '2010') & (data['year'] <= '2015')]
+	ac = 0
+	if ac ==1:
+		a = data[data['rb_quantile'] <=0.1]
+		a['rb_ratio'] = 1
+		
+		c = data[(data['rb_quantile'] >0.40) & (data['rb_quantile'] <=0.55)]
+		d = data[(data['rb_quantile'] >0.2) & (data['rb_quantile'] <=0.3)]
+		e = data[(data['rb_quantile'] >0.65) & (data['rb_quantile'] <=0.8)]
+		print(e.shape[0],d.shape[0],c.shape[0])
+		print("==========")
+		# size = data[(data['rb_quantile'] >=0.45) & (data['rb_quantile'] <=0.55)].shape[0]
+		# c = data[(data['rb_quantile'] >0.2) & (data['rb_quantile'] <=0.8)].sample(size)
+		c['rb_ratio'] = 2
+		d['rb_ratio'] = 1
+		e['rb_ratio'] = 3
+		
+		b = data[data['rb_quantile'] >=0.9]
+		b['rb_ratio'] = 3
+		# print(b.head(10))
+		data = pd.concat([a, c,d,e, b])
+	else:
+		a = data[(data['rb_quantile'] >0) & (data['rb_quantile'] <=0.33)]
+		b = data[(data['rb_quantile'] >0.33) & (data['rb_quantile'] <=0.67)]
+		c = data[(data['rb_quantile'] >0.67) & (data['rb_quantile'] <=1)]
+
+		a['rb_ratio'] = 1
+		b['rb_ratio'] = 2
+		c['rb_ratio'] = 3
+		data = pd.concat([a,b,c])
+	# print(data.head(5))
+	return data
 
 def fetchScatterPlotData(chart_type, type_to_display):
 
@@ -334,10 +358,11 @@ def fetchBoxPlotData(chart_type, type_to_display):
 
 def fetchParallelPlotData(chart_type, type_to_display):
 	
-	columns = ['name','year','budget','revenue','profit','runtime','popularity']#,'no_production_companies',]
+	columns = ['name','rb_ratio','year','budget','revenue','profit','runtime','popularity']#,'no_production_companies',]
 	data = filter_rb_ratio(MOVIES_DF)
 	data = data[columns]
-	
+	# print("=======Parallel========")
+	# print(data.head(5))
 	if type_to_display.upper() != 'CONSOLIDATED':
 		data = data[data.name.isin(GENRE_MOVIE_MAPPER[type_to_display])][columns]
 		data = data[(data['year'] > '2010') & (data['year'] <= '2015')]
