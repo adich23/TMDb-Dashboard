@@ -1219,6 +1219,10 @@ var color = d3.scaleOrdinal()
 .domain([1,2,3])
 .range(['#b41f2d','#ffa70e','#1b9e51'])
 
+var naming = d3.scaleOrdinal()
+.domain([1,2,3])
+.range(['Least','Mid-range','Best'])
+
 var xAxis = d3.axisBottom(x);
 
 var yAxis = d3.axisLeft(y);
@@ -1310,7 +1314,7 @@ var svg = d3.select(div).append("svg").attr('id', 'chart'+divId)
       .style("font-size", "12px")
       .attr("dy", ".35em")
       .style("text-anchor", "end")
-      .text(function(d) { return d; });
+      .text(function(d) { return naming(d); });
 
   // TODO Chart Title
 
