@@ -770,8 +770,8 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     
     // set the dimensions and margins of the graph
     d3.select('#chart'+divId).remove();
-    var margin = {top: 20, right: 20, bottom: 50, left: 450},
-    width = 960 - margin.left - margin.right,
+    var margin = {top: 20, right: 20, bottom: 50, left: 20},
+    width = 500 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;    
   
     var barWidth = 30;
@@ -1002,12 +1002,6 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     function sortNumber(a,b) {
     return a - b;
     }
-
-
-
-
-
-
 }
 
 
@@ -1017,7 +1011,7 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
 
     var margin = {top: 30, right: 10, bottom: 10, left: 10};
     var width = 960 - margin.left - margin.right;
-    var height = 400 - margin.top - margin.bottom;
+    var height = 390 - margin.top - margin.bottom;
 
     sample_data = JSON.parse(dfData)
 
