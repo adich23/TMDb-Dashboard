@@ -156,26 +156,15 @@ def preprocess_data():
 	global PARALLEL_DF
 
 	ALL_GENRES = findGenres(data)
-	'''
-	ALL_GENRES = ['Action',
-				 'Adventure',
-				 'Fantasy',
-				 'Science Fiction',
-				 'Crime',
-				 'Drama',
-				 'Thriller',
-				 'Animation',
-				 'Comedy',
-				 'Romance',
-				 'Horror',
-				 'Mystery',
-				 'History',
-				 'War']
-	'''
 	GENRE_MOVIE_MAPPER = buildGenreMovieMapper(data)
 	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
 	MOVIES_DF = buildMoviesDf()
 	PARALLEL_DF = buildParallelDf(MOVIES_DF)
+
+	
+	for genre in ALL_GENRES:
+		movie_in_genre = GENRE_MOVIE_MAPPER[genre]
+		print(genre, len(movie_in_genre))
 		
 	print("Done with preprocessing data")
 

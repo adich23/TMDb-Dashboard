@@ -199,9 +199,9 @@ function draw_circularBiPlotConsolidated(data, divID) {
 
 
 function draw_circularBiPlotSpecific(data, divID) {
-    var margin = {top: 180, right: 0, bottom: 0, left: 210},
-    width = 460 - margin.left - margin.right,
-    height = 460 - margin.top - margin.bottom,
+    var margin = {top: 225, right: 0, bottom: 0, left: 220},
+    width = 500 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom,
     innerRadius = 90,
     outerRadius = Math.min(width, height) / 2;
 
@@ -275,7 +275,7 @@ function draw_circularBiPlotSpecific(data, divID) {
             .append("text")
             .text(function(d){return(d.movie)})
             .attr("transform", function(d) { return (x(d.movie) + x.bandwidth() / 2 + Math.PI) % (2 * Math.PI) < Math.PI ? "rotate(180)" : "rotate(0)"; })
-            .style("font-size", "10px")
+            .style("font-size", "8px")
             .attr("alignment-baseline", "middle")
         .on("mouseover", function(d, i) {
             d3.select(this).transition()
@@ -285,18 +285,22 @@ function draw_circularBiPlotSpecific(data, divID) {
                 svg.append("text")
                     .attr("class", "tooltip_budget")
                     .attr("transform", "translate(" + (-innerRadius/2 + 35)  + "," + 0 + ")")
-                    .style("font-size", "10px")
+                    .style("font-size", "8px")
                     .style("fill", "darkOrange")
                     .append("svg:tspan")
-                        .attr("x", -40)
-                        .attr("dy", -15)
-                        .text("Movie: " + d.movie)
+                        .attr("x", -60)
+                        .attr("dy", -20)
+                        .text("Movie:")
                     .append("svg:tspan")
-                        .attr("x", -40)
+                        .attr("x", -60)
+                        .attr("dy", 15)
+                        .text(d.movie)  
+                    .append("svg:tspan")
+                        .attr("x", -60)
                         .attr("dy", 15)
                         .text("Budget: " + d.budget + " M")
                     .append("svg:tspan")
-                        .attr("x", -40)
+                        .attr("x", -60)
                         .attr("dy", 15)
                         .text("Revenue: " + d.revenue + " M")
         })
