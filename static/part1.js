@@ -84,8 +84,10 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     }
 
     // Setup a color scale for filling each box
-    var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
-    .domain(Object.keys(groupCounts).sort());
+    var colorScale = d3.scaleOrdinal()
+    .domain(['2011', '2012', '2013', '2014','2015'])
+    // .domain(Object.keys(groupCounts).sort())
+    .range(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd"]);//,"#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]);
 
     // Prepare the data for the box plots
     var boxPlotData = [];
@@ -328,8 +330,12 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
       })
     years_set = d3.set(years_list.sort())
     years_list = Array.from(years_set);
-    var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
-    .domain(years_list);
+    var colorScale = d3.scaleOrdinal()
+    .domain(['2011', '2012', '2013', '2014','2015'])
+    .range(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd"]);//,"#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]);
+
+    // var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+    // .domain(years_list);
     // Extract the list of dimensions and create a scale for each.
     x.domain(dimensions = d3.keys(sample_data[0]).filter(function(d) {
         
@@ -497,7 +503,9 @@ var x = d3.scaleLinear()
 var y = d3.scaleLinear()
     .range([height-30, 0]);
 
-var color = d3.scaleOrdinal(d3.schemeCategory10);
+var color = d3.scaleOrdinal()
+.domain([1,2,3])
+.range(['#b41f2d','#ffa70e','#1b9e51'])
 
 var xAxis = d3.axisBottom(x);
 

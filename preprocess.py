@@ -51,6 +51,8 @@ def buildMoviesDf():
 		row[1] = val['budget']/1000000
 		row[2] = val['revenue']/1000000
 		row[3] = val['popularity']
+		if row[3] > 600:
+			continue
 		row[4] = val['vote_average']
 		row[5] = len(val['genres'])#.split())
 		row[6] = len(val['production_companies'])#.split())
@@ -66,6 +68,9 @@ def buildMoviesDf():
 	
 	data = pd.DataFrame(data_list, columns=columns)
 	data['year'] = data['release_date'].apply(lambda x: str(x)[:4])
+	data['rb_ratio'] = data['revenue'] / data['budget']
+	data['rb_quantile'] = data['rb_ratio'].rank(pct=True)
+
 	return data
 
 def buildParallelDf(data):

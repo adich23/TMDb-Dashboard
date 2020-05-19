@@ -254,7 +254,18 @@ def get_rb_ratio(row):
 		return 2
 	else:
 		return 1
+def filter_rb_ratio(data):
+	a = data[data['rb_quantile'] <=0.1]
+	a['rb_ratio'] = 1
+	
+	size = data[(data['rb_quantile'] >=0.45) & (data['rb_quantile'] <=0.55)].shape[0]
+	c = data[(data['rb_quantile'] >0.2) & (data['rb_quantile'] <=0.8)].sample(size)
+	c['rb_ratio'] = 2
+	
+	b = data[data['rb_quantile'] >=0.9]
+	b['rb_ratio'] = 3
 
+	return pd.concat([a,c,b])
 
 def fetchScatterPlotData(chart_type, type_to_display):
 
@@ -264,16 +275,19 @@ def fetchScatterPlotData(chart_type, type_to_display):
 		# filter data['name'] on that list
 		data = data[data.name.isin(GENRE_MOVIE_MAPPER[type_to_display])]
 
-	data['rb_ratio'] = data['revenue'] / data['budget']
+	# data['rb_ratio'] = data['revenue'] / data['budget']
 	# data['rb_ratio'] = data['rb_ratio'].astype(int)
-	data['rb_ratio'] = data['rb_ratio'].apply(get_rb_ratio)
+	# data['rb_ratio'] = data['rb_ratio'].apply(get_rb_ratio)
+	data = filter_rb_ratio(data) 
 
-	return data[data['budget'] > 5].head(400)
+	return data
+	# return data[data['budget'] > 5].head(400)
 
 
 def fetchBoxPlotData(chart_type, type_to_display):
 	
 	data = MOVIES_DF
+	data = filter_rb_ratio(data)
 	data['year'] = data['release_date'].apply(lambda x: str(x)[:4])
 	if type_to_display.upper() != 'CONSOLIDATED':
 		print(type_to_display)
@@ -283,18 +297,18 @@ def fetchBoxPlotData(chart_type, type_to_display):
 		data = data[data.name.isin(GENRE_MOVIE_MAPPER[type_to_display])]
 	
 	year_dict_0 = {}
-	year_dict_0['2011'] = list(data[data['year'] == '2011']['popularity'])[:100]
-	year_dict_0['2012'] = list(data[data['year'] == '2012']['popularity'])[:100]
-	year_dict_0['2013'] = list(data[data['year'] == '2013']['popularity'])[:100]
-	year_dict_0['2014'] = list(data[data['year'] == '2014']['popularity'])[:100]
-	year_dict_0['2015'] = list(data[data['year'] == '2015']['popularity'])[:100]
+	year_dict_0['2011'] = list(data[data['year'] == '2011']['popularity'])#[:100]
+	year_dict_0['2012'] = list(data[data['year'] == '2012']['popularity'])
+	year_dict_0['2013'] = list(data[data['year'] == '2013']['popularity'])
+	year_dict_0['2014'] = list(data[data['year'] == '2014']['popularity'])
+	year_dict_0['2015'] = list(data[data['year'] == '2015']['popularity'])
 
 	year_dict_1 = {}
-	year_dict_1['2011'] = list(data[data['year'] == '2011']['runtime'])[:100]
-	year_dict_1['2012'] = list(data[data['year'] == '2012']['runtime'])[:100]
-	year_dict_1['2013'] = list(data[data['year'] == '2013']['runtime'])[:100]
-	year_dict_1['2014'] = list(data[data['year'] == '2014']['runtime'])[:100]
-	year_dict_1['2015'] = list(data[data['year'] == '2015']['runtime'])[:100]
+	year_dict_1['2011'] = list(data[data['year'] == '2011']['runtime'])#[:100]
+	year_dict_1['2012'] = list(data[data['year'] == '2012']['runtime'])
+	year_dict_1['2013'] = list(data[data['year'] == '2013']['runtime'])
+	year_dict_1['2014'] = list(data[data['year'] == '2014']['runtime'])
+	year_dict_1['2015'] = list(data[data['year'] == '2015']['runtime'])
 
 	return [year_dict_0, year_dict_1]
 
@@ -302,9 +316,9 @@ def fetchBoxPlotData(chart_type, type_to_display):
 def fetchParallelPlotData(chart_type, type_to_display):
 	
 	columns = ['name','year','budget','revenue','profit','runtime','popularity']#,'no_production_companies',]
-	data = MOVIES_DF[columns]
+	data = filter_rb_ratio(MOVIES_DF)
+	data = data[columns]
 	
-
 	if type_to_display.upper() != 'CONSOLIDATED':
 		data = data[data.name.isin(GENRE_MOVIE_MAPPER[type_to_display])][columns]
 		data = data[(data['year'] > '2010') & (data['year'] <= '2015')]
@@ -313,7 +327,7 @@ def fetchParallelPlotData(chart_type, type_to_display):
 		data = PARALLEL_DF
 	
 	# sample data on a strategy
-	return data.head(100)
+	return data#.head(100)
 
 
 def driver_fetch_data(chart_type, type_to_display):
