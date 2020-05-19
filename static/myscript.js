@@ -28,17 +28,17 @@ const callBottom10 = document.querySelector("#bottom10");
 
 callTop10.onclick = function() {
     var genre = genreOnDemand;
-    driver_circularBiPlot('/drawCircularBiPlot/top10/' + genre, 'SPECIFIC', 'chart_1_radarChart')
+    driver_circularBiPlot('/drawCircularBiPlot/top10/' + genre, 'SPECIFIC', 'chart_2_circularBiPlot')
 };
 
 callMid10.onclick = function() {
     var genre = genreOnDemand;
-    driver_circularBiPlot('/drawCircularBiPlot/mid10/' + genre, 'SPECIFIC', 'chart_1_radarChart')
+    driver_circularBiPlot('/drawCircularBiPlot/mid10/' + genre, 'SPECIFIC', 'chart_2_circularBiPlot')
 };
 
 callBottom10.onclick = function() {
     var genre = genreOnDemand;
-    driver_circularBiPlot('/drawCircularBiPlot/bottom10/' + genre, 'SPECIFIC', 'chart_1_radarChart')
+    driver_circularBiPlot('/drawCircularBiPlot/bottom10/' + genre, 'SPECIFIC', 'chart_2_circularBiPlot')
 };
 
 function draw_circularBiPlotConsolidated(data, divID) {

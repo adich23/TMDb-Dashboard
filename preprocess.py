@@ -94,7 +94,7 @@ def buildMovieDetailsMapper(data):
 
 	for movie_index, movie_data in data.iterrows():
 		movie_title = movie_data["original_title"]
-
+		
 		movie_data_dict = {}
 		movie_data_dict["budget"] = movie_data["budget"]
 		movie_data_dict["genres"] = movie_data["genres"]
@@ -121,7 +121,7 @@ def preprocess_data():
 	This method preprocesses the data and creates global variables for various mapper objects of ours.  
 	'''
 	print("We're currently preprocessing data")
-	data = pd.read_csv("movie_data_updated.csv")
+	data = pd.read_csv("movie_data.csv")
 	
 	genres_list = []
 	keywords_list = []
@@ -153,11 +153,7 @@ def preprocess_data():
 	global PARALLEL_DF
 
 	ALL_GENRES = findGenres(data)
-	GENRE_MOVIE_MAPPER = buildGenreMovieMapper(data)
-	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
-	MOVIES_DF = buildMoviesDf()
-	PARALLEL_DF = buildParallelDf(MOVIES_DF)
-
+	'''
 	ALL_GENRES = ['Action',
 				 'Adventure',
 				 'Fantasy',
@@ -172,6 +168,13 @@ def preprocess_data():
 				 'Mystery',
 				 'History',
 				 'War']
+	'''
+	GENRE_MOVIE_MAPPER = buildGenreMovieMapper(data)
+	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
+	MOVIES_DF = buildMoviesDf()
+	PARALLEL_DF = buildParallelDf(MOVIES_DF)
+	
+	
 	print("Done with preprocessing data")
 
 	
