@@ -22,8 +22,8 @@ def initialize():
 	return render_template("index.html")
 
 
-@app.route("/drawCircularBiPlot/<type_to_display>", methods=['POST', 'GET'])
-def draw_circular_biplot(type_to_display):
+@app.route("/drawCircularBiPlot/<class_to_display>/<type_to_display>", methods=['POST', 'GET'])
+def draw_circular_biplot(class_to_display, type_to_display):
 	'''
 	This module receives input from the Ajax driver function (myscript.js) and is used to draw
 	the Circular BiPlot Graph to plot revenue vs budget for consolidated genre-specific data 
@@ -42,8 +42,8 @@ def draw_circular_biplot(type_to_display):
 		If 'type_to_display' is the name of the genre, we send the [1-10, 45-55, 90-100] ranged 
 		values in revenue/budget sorted list. 
 	'''
-
-	data = driver_fetch_data("circular_biplot", type_to_display)
+	data = driver_fetch_data("circular_biplot", type_to_display, class_to_display)
+	
 	return json.dumps(data)
 
 
@@ -74,7 +74,6 @@ def draw_radar_chart(type_to_display):
 
 @app.route("/draw2dScatterPlot/<type_to_display>", methods=['POST', 'GET'])
 def draw_2d_scatter_plot(type_to_display):
-	# print("ENTER")
 	data = driver_fetch_data("scatterplot", type_to_display)
 	return data.to_json(orient='records')
 

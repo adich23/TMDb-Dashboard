@@ -36,6 +36,7 @@ def buildGenreMovieMapper(data):
 
 	return genreMovieMapper
 
+
 def buildMoviesDf():
 	columns = ['name','budget','revenue','popularity','vote_average','no_genres','no_production_companies',
           'no_keywords','no_production_countries','profit','runtime','release_date']
@@ -95,7 +96,6 @@ def buildMovieDetailsMapper(data):
 		movie_title = movie_data["original_title"]
 
 		movie_data_dict = {}
-		
 		movie_data_dict["budget"] = movie_data["budget"]
 		movie_data_dict["genres"] = movie_data["genres"]
 		movie_data_dict["keywords"] = movie_data["keywords"]
@@ -158,6 +158,20 @@ def preprocess_data():
 	MOVIES_DF = buildMoviesDf()
 	PARALLEL_DF = buildParallelDf(MOVIES_DF)
 
+	ALL_GENRES = ['Action',
+				 'Adventure',
+				 'Fantasy',
+				 'Science Fiction',
+				 'Crime',
+				 'Drama',
+				 'Thriller',
+				 'Animation',
+				 'Comedy',
+				 'Romance',
+				 'Horror',
+				 'Mystery',
+				 'History',
+				 'War']
 	print("Done with preprocessing data")
 
 	

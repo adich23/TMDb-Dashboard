@@ -12,9 +12,10 @@
         <!-- d3 library -->
         <script src="https://d3js.org/d3.v4.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
-        <!-- Custom JS functions -->
+        <!-- Custom JS functions 
         <script  src="{{url_for('static', filename='buildCircularBarChart.js')}}"></script>
         <script  src="{{url_for('static', filename='buildRadarChart.js')}}"></script>
+        -->
         <!-- Custom CSS styles -->
         <link rel="stylesheet" media="all" href="{{url_for('static', filename='mystyle.css')}}">
         <script src="https://cdn.jsdelivr.net/gh/holtzy/D3-graph-gallery@master/LIB/d3-scale-radial.js"></script>
@@ -145,8 +146,7 @@
         tab-size: 40;
         font-size: 10px;
         overflow: auto;
-        }
-                
+        }          
     </style>
     </head>      
 
@@ -192,9 +192,9 @@
 
                     <div class="container-fluid">
                         <div id="buttons_for_circularBiPlot">
-                            <button type="button" class="btn btn-outline-primary" onclick="driver_radarChart('/drawRadarChart/top10', 'SPECIFIC', 'chart_1_radarChart')">Show Top-10% of the Data</button>
-                            <button type="button" class="btn btn-outline-primary" onclick="driver_radarChart('/drawRadarChart/mid10', 'SPECIFIC', 'chart_1_radarChart')">Show Mid-10% of the Data</button>
-                            <button type="button" class="btn btn-outline-primary" onclick="driver_radarChart('/drawRadarChart/bottom10', 'SPECIFIC', 'chart_1_radarChart')">Show Bottom-10% of the Data</button>
+                            <button type="button" class="btn btn-outline-primary" id="top10"> Show Top-10% of the Data </button>
+                            <button type="button" class="btn btn-outline-primary" id="mid10"> Show Mid-10% of the Data </button>
+                            <button type="button" class="btn btn-outline-primary" id="bottom10"> Show Bottom-10% of the Data </button>
                         </div>
 
                         <div id="chart_2_circularBiPlot">
@@ -218,30 +218,27 @@
             </div>
             <div id="div6"></div>
 
-              <!-- Load d3.js -->
+              <!-- Load d3.js 
               <div id = "error"></div>
               <script src="{{ url_for('static', filename='d3.v4.min.js')}}"></script> 
               <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-tip/0.7.1/d3-tip.min.js"></script>
               <script src = "https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
               <script src = "{{ url_for('static', filename='part1.js')}}"></script>   
-            
-
+            -->
+            <script  src="{{url_for('static', filename='myscript.js')}}"></script>
             <script>
-               
                 function callAllConsolidatedFunctions() {
                     driver_radarChart("/drawRadarChart/CONSOLIDATED", "CONSOLIDATED", "chart_1_radarChart");
-                    driver_circularBiPlot("/drawCircularBiPlot/CONSOLIDATED", "CONSOLIDATED", "chart_2_circularBiPlot");
-                    
+                    driver_circularBiPlot("/drawCircularBiPlot/CONSOLIDATED/CONSOLIDATED", "CONSOLIDATED", "chart_2_circularBiPlot");
+
                     var category="CONSOLIDATED";
                     
                     plot_scatter('/draw2dScatterPlot/'+category, category);
                     plot_boxplot('/drawBoxPlot/'+category, category);
-                    // always call box-plot first
                     plot_parallelplot('/drawParallelPlot/'+category, category);
-
+                    hide_buttons();
                 }
-                callAllConsolidatedFunctions()
-              
+                callAllConsolidatedFunctions()             
             </script>
         </div>
     </body>

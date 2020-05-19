@@ -4,7 +4,7 @@ import json
 import preprocess 
 
 
-def fetchCircularBiPlotData(type_to_display):
+def fetchCircularBiPlotData(type_to_display, class_to_display):
 	'''
 	This function is used to fetch the data to build a Circular BiPlot and is called from app.py
 	Input:
@@ -15,9 +15,7 @@ def fetchCircularBiPlotData(type_to_display):
 	'''
 	
 	plot_data = []
-
 	if type_to_display == 'CONSOLIDATED': 
-
 		for genre in ALL_GENRES:
 
 			movies_in_genre = list(GENRE_MOVIE_MAPPER[genre]) # This list stores all the movies for the particular genre
@@ -57,8 +55,8 @@ def fetchCircularBiPlotData(type_to_display):
 		
 		movies_in_genre = list(GENRE_MOVIE_MAPPER[genre]) # Fetching all the movies in the genre
 		num_movies = min(len(movies_in_genre), 30) # Taking the minimum of total movies in the genre and 30 because some genres have less than 30 movies in them.	
-
-		# Sorting movies by revenue/budget ratio in the genre
+		print("NUMBER OF MOVIES + ")
+		print(num_movies)
 		movie_details_sorter = [] # List that maintains movie_title and revenue_budget ratio of it so that we can sort on it. Movie details are added as elements in it.
 		
 		for movie in movies_in_genre:
@@ -69,19 +67,59 @@ def fetchCircularBiPlotData(type_to_display):
 
 			movie_details_sorter.append((movie, movie_budget, movie_revenue, movie_revenue_budget_ratio))
 		
-		movie_details_sorter.sort(key = lambda x: x[3], reverse=True)
-		# Done sorting movies by revenue/budget ratio in the genre
-		
-		for movie_index in range(num_movies):
-			movie_details_dict = {}
-			movie_details = movie_details_sorter[movie_index]
+		if class_to_display == "top10":	
+			print("Are we ever entering this shit?");	
+			movie_details_sorter.sort(key = lambda x: x[3], reverse=True)
+			for movie_index in range(num_movies):
+				movie_details_dict = {}
+				movie_details = movie_details_sorter[movie_index]
 
-			# Adding only the movie_name, movie_revenue and movie_budget as we don't need the ratio
-			movie_details_dict["movie"]    = movie_details[0]
-			movie_details_dict["budget"]   = int(movie_details[1]/1e6)
-			movie_details_dict["revenue"]  = int(movie_details[2]/1e6)
+				# Adding only the movie_name, movie_revenue and movie_budget as we don't need the ratio
+				movie_details_dict["movie"]    = movie_details[0]
+				movie_details_dict["budget"]   = int(movie_details[1]/1e6)
+				movie_details_dict["revenue"]  = int(movie_details[2]/1e6)
+				
+				plot_data.append(movie_details_dict)
+		
+		elif class_to_display == "mid10":
+			print("What about this shit?");
+			movie_details_sorter.sort(key = lambda x: x[3], reverse=True)
+
+			mid_index = int(len(movies_in_genre)/2)
+			#mid_movies_range = [mid_index - 15, mid_index + 14]
 			
-			plot_data.append(movie_details_dict)
+			print("MID RANGE MOVIES!")
+			#print(mid_movies_range)
+
+			for movie_index in range(mid_index - 15, mid_index + 14):
+				movie_details_dict = {}
+				movie_details = movie_details_sorter[movie_index]
+
+				# Adding only the movie_name, movie_revenue and movie_budget as we don't need the ratio
+				movie_details_dict["movie"]    = movie_details[0]
+				movie_details_dict["budget"]   = int(movie_details[1]/1e6)
+				movie_details_dict["revenue"]  = int(movie_details[2]/1e6)
+				
+				plot_data.append(movie_details_dict)
+		elif class_to_display == "bottom10":
+			print("Atleast this shit?");
+			movie_details_sorter.sort(key = lambda x: x[3])
+			for movie_index in range(num_movies):
+				print("Are we in??")
+				movie_details_dict = {}
+				movie_details = movie_details_sorter[movie_index]
+
+				# Adding only the movie_name, movie_revenue and movie_budget as we don't need the ratio
+				movie_details_dict["movie"]    = movie_details[0]
+				movie_details_dict["budget"]   = int(movie_details[1]/1e4)
+				movie_details_dict["revenue"]  = int(movie_details[2]/1e4)
+				
+				plot_data.append(movie_details_dict)
+		else:
+			print("OKAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY?")
+
+		print("What is plot data")
+		print(plot_data)
 
 		return plot_data
 
@@ -96,7 +134,7 @@ def fetchRadarPlotData(type_to_display):
 
 	global CONSOLIDATED_RADAR_DATA
 
-	specific_flag = True
+	specific_flag = False
 
 	if type_to_display == "CONSOLIDATED":
 		
@@ -119,7 +157,7 @@ def fetchRadarPlotData(type_to_display):
 				total_revenue += movie_details["revenue"]
 				total_popularity += movie_details["popularity"]		
 				# total_runtime += movie_details["runtime"]
-				total_vote_avg += movie_details["vote_average"]
+				total_vote_avg += movie_details["runtime"]
 			
 			total_budget /= num_movies_in_genre
 			total_revenue /= num_movies_in_genre 
@@ -144,12 +182,11 @@ def fetchRadarPlotData(type_to_display):
 		GENRE_CATEGORY_MAPPER = {
 			"cat1": ["Action", "Adventure", "War"],
 			"cat2": ["Drama", "Comedy", "Romance"],
-			"cat3": ["Science Fiction", "Family", "Fantasy", "Animation", "Music", "Documentary" ],
-			"cat4": ["Thriller", "Crime", "Mystery", "Horror", "History"] 
+			"cat3": ["Science Fiction", "Fantasy", "Animation"],
+			"cat4": ["Thriller", "Crime", "Mystery", "Horror",] 
 		}
 
 		genres = GENRE_CATEGORY_MAPPER[type_to_display]
-		print(genres)
 
 		for genre_index, genre in enumerate(genres):
 			
@@ -169,9 +206,8 @@ def fetchRadarPlotData(type_to_display):
 				total_budget += movie_details["budget"]
 				total_revenue += movie_details["revenue"]
 				total_popularity += movie_details["popularity"]		
-				total_vote_avg += movie_details["vote_average"]
+				total_vote_avg += movie_details["runtime"]
 				#total_runtime += movie_details["runtime"]
-			
 
 			genre_details = []
 			genre_details.append(genre)
@@ -184,34 +220,21 @@ def fetchRadarPlotData(type_to_display):
 		plot_data.loc[genre_index+1] = ["IGNORE", 0, 0, 0, 0]
 
 	else:
-		specific_flag = False
-		print("Entered else with tag:", type_to_display)
+		specific_flag = True
+	
 		genre = type_to_display
-		print(genre)
 		for genre_index, genre_data in CONSOLIDATED_RADAR_DATA.iterrows():
-			print(genre_data)
-			print()
 			if genre_data["genre"] == genre:
 				plot_data.loc[0] = list(genre_data) 
-				print("Entered?", genre_data)
-
-	print("plot data is:")
-	print(plot_data)
 
 	data = []
 	
-	if specific_flag:
+	if not specific_flag:
 		from sklearn.preprocessing import MinMaxScaler
-		
 		scaler = MinMaxScaler()
-		
 		genres = plot_data["genre"]
 		plot_data = plot_data.drop(columns=["genre"])
-
 		plot_data = scaler.fit_transform(plot_data)
-
-		print("PLOT DATA AFTER SCALING!")
-		print(plot_data)
 
 		for index in range(len(genres) - 1):
 			genre_dict = {}
@@ -219,10 +242,10 @@ def fetchRadarPlotData(type_to_display):
 
 			genre_axes = []
 
-			genre_axes.append({"axis": "budget", "value": plot_data[index][0] * 100})
-			genre_axes.append({"axis": "revenue", "value": plot_data[index][1] * 100})
+			genre_axes.append({"axis": "budget", "value": (plot_data[index][0]) * 100})
+			genre_axes.append({"axis": "revenue", "value": (plot_data[index][1]) * 100})
 			genre_axes.append({"axis": "popularity", "value": plot_data[index][2] * 100})
-			genre_axes.append({"axis": "vote_avg", "value": plot_data[index][3] * 100})
+			genre_axes.append({"axis": "runtime", "value": plot_data[index][3] * 100})
 			
 			genre_dict["axes"] = genre_axes
 			data.append(genre_dict)
@@ -230,23 +253,19 @@ def fetchRadarPlotData(type_to_display):
 	else:
 		genre_dict = {}
 		genre_dict["name"] = type_to_display
-		#print(plot_data[0])
 		genre_axes = []
 		index = 0
-		genre_axes.append({"axis": "budget", "value": plot_data["budget"][index] * 100})
-		genre_axes.append({"axis": "revenue", "value": plot_data["revenue"][index] * 100})
-		genre_axes.append({"axis": "popularity", "value": plot_data["popularity"][index] * 100})
-		genre_axes.append({"axis": "vote_avg", "value": plot_data["vote_avg"][index] * 100})
+		genre_axes.append({"axis": "budget", "value": (plot_data["budget"][index]/1e5)})
+		genre_axes.append({"axis": "revenue", "value": (plot_data["revenue"][index]/1e5)})
+		genre_axes.append({"axis": "popularity", "value": plot_data["popularity"][index] * 10})
+		genre_axes.append({"axis": "runtime", "value": plot_data["vote_avg"][index] * 10})
 		
 		genre_dict["axes"] = genre_axes
 		data.append(genre_dict)
-	print("What is data?", data)
 	return data
 
 
 def get_rb_ratio(row):
-	# print(row)
-	# ratio = float(row[3])/int(row[2])
 	ratio = row
 	if ratio >4:
 		return 3
@@ -271,8 +290,6 @@ def fetchScatterPlotData(chart_type, type_to_display):
 
 	data = MOVIES_DF
 	if type_to_display.upper() != 'CONSOLIDATED':
-		# find movie list on that genre
-		# filter data['name'] on that list
 		data = data[data.name.isin(GENRE_MOVIE_MAPPER[type_to_display])]
 
 	# data['rb_ratio'] = data['revenue'] / data['budget']
@@ -290,10 +307,12 @@ def fetchBoxPlotData(chart_type, type_to_display):
 	data = filter_rb_ratio(data)
 	data['year'] = data['release_date'].apply(lambda x: str(x)[:4])
 	if type_to_display.upper() != 'CONSOLIDATED':
+		'''
 		print(type_to_display)
 		print(GENRE_MOVIE_MAPPER.keys())
 		print(GENRE_MOVIE_MAPPER[type_to_display][:10])
 		print("============================")
+		'''
 		data = data[data.name.isin(GENRE_MOVIE_MAPPER[type_to_display])]
 	
 	year_dict_0 = {}
@@ -330,7 +349,7 @@ def fetchParallelPlotData(chart_type, type_to_display):
 	return data#.head(100)
 
 
-def driver_fetch_data(chart_type, type_to_display):
+def driver_fetch_data(chart_type, type_to_display, class_to_display=None):
 	'''
 	This method is the driver function to fetch data for any specific chart type for any data. 
 	
@@ -348,7 +367,7 @@ def driver_fetch_data(chart_type, type_to_display):
 		If 'type_to_display' is the name of the genre, we send the [1-10, 45-55, 90-100] ranged 
 		values in revenue/budget sorted list. 
 	''' 
-	method_mapper_dict = {"circular_biplot": "fetchCircularBiPlotData(type_to_display)", "scatterplot": "fetchScatterPlotData(chart_type, type_to_display)",
+	method_mapper_dict = {"circular_biplot": "fetchCircularBiPlotData(type_to_display, class_to_display)", "scatterplot": "fetchScatterPlotData(chart_type, type_to_display)",
 							"radar_plot": "fetchRadarPlotData(type_to_display)", "boxplot": "fetchBoxPlotData(chart_type, type_to_display)",
 							"parallelplot":"fetchParallelPlotData(chart_type, type_to_display)"}
 
@@ -400,6 +419,7 @@ def initialize_global_vars():
 		AVG_GENRE_BUDGETS[genre] = 0
 		AVG_GENRE_REVENUES[genre] = 0
 
+	
 	print("Done with initializing global variables")
 
 	return True
