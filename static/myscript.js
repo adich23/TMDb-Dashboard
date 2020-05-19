@@ -769,7 +769,7 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     
     // set the dimensions and margins of the graph
     d3.select('#chart'+divId).remove();
-    var margin = {top: 20, right: 20, bottom: 50, left: 40},
+    var margin = {top: 5, right: 20, bottom: 107, left: 60},
     width = 500 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;    
   
@@ -963,13 +963,13 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
 
     //x-axis
     svg.append("g")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + (height)+ ")")
     .call(d3.axisBottom(xScale));
 
     svg.append("text")             
       .attr("transform",
             "translate(" + (width/2) + " ," + 
-                           (height + margin.top + 5) + ")")
+                           (height + margin.top + 25) + ")")
       .style("text-anchor", "middle")
       .text("Years");
 
@@ -983,9 +983,9 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
 
     svg.append("text")
       .attr("transform", "rotate(-90)")
-      .attr("y", 0)
+      .attr("y", -30)
       .attr("x",0 - (height / 2))
-      .attr("dy", "1em")
+      .attr("dy", "1.5em")
       .style("text-anchor", "middle")
       .text(feature_map.get(feature_num)); 
         
@@ -1010,7 +1010,7 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
 
     var margin = {top: 30, right: 10, bottom: 5, left: 10};
     var width = 860 - margin.left - margin.right;
-    var height = 350 - margin.top - margin.bottom;
+    var height = 400 - margin.top - margin.bottom;
 
     sample_data = JSON.parse(dfData)
 
@@ -1134,6 +1134,7 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
         })
         .append("text")
         .style("text-anchor", "middle")
+        .attr("font-size", "12px")
         .attr("y", -9)
         .text(function(d) { return d; });
 
@@ -1204,7 +1205,7 @@ function draw_scatter_2d(dfData, chartTitle,divId,isBrush='0') {
     }
     // var data = JSON.parse(dfData);
     
-    var margin = {top: 20, right: 60, bottom: 60, left: 40},
+    var margin = {top: 40, right: 40, bottom: 20, left: 30},
     width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
@@ -1313,14 +1314,14 @@ var svg = d3.select(div).append("svg").attr('id', 'chart'+divId)
 
   // TODO Chart Title
 
-  svg.append("text")
-  .attr("x", (width / 2))
-  .attr("y", 0 + (margin.top / 2))
-  .attr("text-anchor", "middle")
-  .style("font-size", "16px")
-  .style("text-decoration", "underline")
-  .style("font-weight", "bold")
-  .text(chartTitle);
+//   svg.append("text")
+//   .attr("x", (width / 2))
+//   .attr("y", 0 + (margin.top / 2))
+//   .attr("text-anchor", "middle")
+//   .style("font-size", "16px")
+//   .style("text-decoration", "underline")
+//   .style("font-weight", "bold")
+//   .text(chartTitle);
 
   svg.append("text")
     .attr("class", "axis_label")

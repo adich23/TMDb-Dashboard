@@ -75,7 +75,7 @@ def buildMoviesDf():
 	return data
 
 def buildParallelDf(data):
-	columns = ['budget','revenue','profit','runtime','popularity','no_production_companies']
+	columns = ['budget','revenue','profit','runtime','popularity']#,'no_production_companies']
 	parallel_df = pd.DataFrame(columns=['name']+columns)
 	i=0
 	# print(data.head(5))
