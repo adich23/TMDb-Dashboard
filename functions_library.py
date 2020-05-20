@@ -55,8 +55,7 @@ def fetchCircularBiPlotData(type_to_display, class_to_display):
 		
 		movies_in_genre = list(GENRE_MOVIE_MAPPER[genre]) # Fetching all the movies in the genre
 		num_movies = min(len(movies_in_genre), 30) # Taking the minimum of total movies in the genre and 30 because some genres have less than 30 movies in them.	
-		print("NUMBER OF MOVIES + ")
-		print(num_movies)
+		
 		movie_details_sorter = [] # List that maintains movie_title and revenue_budget ratio of it so that we can sort on it. Movie details are added as elements in it.
 		
 		for movie in movies_in_genre:
@@ -68,7 +67,7 @@ def fetchCircularBiPlotData(type_to_display, class_to_display):
 			movie_details_sorter.append((movie, movie_budget, movie_revenue, movie_revenue_budget_ratio))
 		
 		if class_to_display == "top10":	
-			print("Are we ever entering this shit?");	
+				
 			movie_details_sorter.sort(key = lambda x: x[3], reverse=True)
 			for movie_index in range(num_movies):
 				movie_details_dict = {}
@@ -82,14 +81,14 @@ def fetchCircularBiPlotData(type_to_display, class_to_display):
 				plot_data.append(movie_details_dict)
 		
 		elif class_to_display == "mid10":
-			print("What about this shit?");
+			
 			movie_details_sorter.sort(key = lambda x: x[3], reverse=True)
 
 			mid_index = int(len(movies_in_genre)/2)
 			#mid_movies_range = [mid_index - 15, mid_index + 14]
 			
-			print("MID RANGE MOVIES!")
-			#print(mid_movies_range)
+			
+			
 
 			for movie_index in range(mid_index - 15, mid_index + 14):
 				movie_details_dict = {}
@@ -102,10 +101,10 @@ def fetchCircularBiPlotData(type_to_display, class_to_display):
 				
 				plot_data.append(movie_details_dict)
 		elif class_to_display == "bottom10":
-			print("Atleast this shit?");
+			
 			movie_details_sorter.sort(key = lambda x: x[3])
 			for movie_index in range(num_movies):
-				print("Are we in??")
+				
 				movie_details_dict = {}
 				movie_details = movie_details_sorter[movie_index]
 
@@ -115,11 +114,6 @@ def fetchCircularBiPlotData(type_to_display, class_to_display):
 				movie_details_dict["revenue"]  = int(movie_details[2]/1e4)
 				
 				plot_data.append(movie_details_dict)
-		else:
-			print("OKAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY?")
-
-		print("What is plot data")
-		print(plot_data)
 
 		return plot_data
 
@@ -276,7 +270,7 @@ def get_rb_ratio(row):
 
 
 def filter_rb_ratio(data):
-	print("==========In FIlter Funciton=========")
+	#print("==========In FIlter Funciton=========")
 	data = data[(data['year'] > '2010') & (data['year'] <= '2015')]
 	ac = 0
 	if ac ==1:
@@ -286,8 +280,8 @@ def filter_rb_ratio(data):
 		c = data[(data['rb_quantile'] >0.40) & (data['rb_quantile'] <=0.55)]
 		d = data[(data['rb_quantile'] >0.2) & (data['rb_quantile'] <=0.3)]
 		e = data[(data['rb_quantile'] >0.65) & (data['rb_quantile'] <=0.8)]
-		print(e.shape[0],d.shape[0],c.shape[0])
-		print("==========")
+		#print(e.shape[0],d.shape[0],c.shape[0])
+		#print("==========")
 		# size = data[(data['rb_quantile'] >=0.45) & (data['rb_quantile'] <=0.55)].shape[0]
 		# c = data[(data['rb_quantile'] >0.2) & (data['rb_quantile'] <=0.8)].sample(size)
 		c['rb_ratio'] = 2

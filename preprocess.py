@@ -21,7 +21,6 @@ def findGenres(data):
 
 def buildGenreMovieMapper(data):
 	genreMovieMapper = {}
-	print(ALL_GENRES)
 	for genre in ALL_GENRES:
 		genreMovieMapper[genre] = []
 
@@ -160,11 +159,6 @@ def preprocess_data():
 	MOVIE_DETAILS_MAPPER = buildMovieDetailsMapper(data)
 	MOVIES_DF = buildMoviesDf()
 	PARALLEL_DF = buildParallelDf(MOVIES_DF)
-
-	
-	for genre in ALL_GENRES:
-		movie_in_genre = GENRE_MOVIE_MAPPER[genre]
-		print(genre, len(movie_in_genre))
 		
 	print("Done with preprocessing data")
 

@@ -167,12 +167,12 @@
         .wrapper1 { 
           display: grid; 
           grid-template-columns: repeat(2, 1fr); 
-          grid-auto-rows: 400px; 
+          grid-auto-rows: 430px; 
         } 
         .wrapper2 { 
           display: grid; 
           grid-template-columns: repeat(3, 1fr); 
-          grid-auto-rows: 400px; 
+          grid-auto-rows: 540px; 
         }
         .table td {
             text-align: center;   
@@ -187,36 +187,12 @@
     </head>      
 
 <body>
-        
-        <div class="container-fluid">
-            <p class="lead text-primary text-center h1">
-                CSE 564 Visualization. 
-                <br>
-                Professor: Klaus Mueller. 
-            
-            </p>
-            <hr>
-            <p class="lead text-primary text-right h4">
-                Names
-                IDs
-            </p>
-            
-            <hr>
-            
-            <div class="data_desc jumbotron well">
-                <p class="text-justify border-success rounded text-success " style="text-align:center;">
-                    Dataset Description:
-                </p>
-            </div>
-            <hr>
-        </div>
-
         <div class="wrapper1">
-            <div id="chart_1_radarChart" style="background-color: #eee">
+            <div id="chart_1_radarChart" class="well">
                 <table class="table table-hover">
-                    <thead>
+                    <tr>
                         <td>
-                            <button class="btn btn-secondary btn-lg" onclick="callAllConsolidatedFunctions()"> RESET </button>
+                            <button class="btn btn-info btn-lg" onclick="callAllConsolidatedFunctions()"> RESET </button>
                         </td>
                         <td>
                             <button type="button" class="btn btn-primary btn-lg" onclick="driver_radarChart('/drawRadarChart/cat1', 'GROUPED', 'chart_1_radarChart')">Category-1</button>
@@ -230,47 +206,47 @@
                         <td>
                              <button type="button" class="btn btn-primary btn-lg" onclick="driver_radarChart('/drawRadarChart/cat4', 'GROUPED', 'chart_1_radarChart')">Category-4</button>
                         </td>
-                    </thead>  
+                    </tr>  
                 </table>
             </div>
             
 
-            <div id="div6" style="background-color: #bbb">
+            <div id="div6" class="well">
                 
             </div>
         </div>
         <div class="wrapper2">
         
-            <div  id="chart_2_circularBiPlot">
+            <div  class="well" id="chart_2_circularBiPlot">
                 <table class="table table-hover">
                     <tr class="no_pad">
                         <td class="no_pad">
-                            <button type="button" class="btn btn-outline-primary no_pad" id="top10">Top-10%</button>
+                            <button type="button" class="btn btn-primary" id="top10"> Top-10% </button>
                         </td>
                         <td class="no_pad">
-                            <button type="button" class="btn btn-outline-primary no_pad" id="mid10">Mid-10%</button>
+                            <button type="button" class="btn btn-primary" id="mid10"> Mid-10% </button>
                         </td>
                         <td class="no_pad">
-                            <button type="button" class="btn btn-outline-primary no_pad" id="bottom10">Bottom-10%</button>
+                            <button type="button" class="btn btn-primary" id="bottom10"> Bottom-10% </button>
                         </td>
                     </tr>
                 </table>   
             </div>
             
-            <div id="div5" style="background-color: #abe">
+            <div class="well" id="div5">
                 <table class="table table-hover">
                     <thead>
                         <td>
-                            <button type="button" class="btn btn-outline-primary no_pad" id="btn" value="Popularity">Popularity</button>
+                            <button type="button" class="btn btn-primary" id="btn" value="Popularity"> Popularity </button>
                         </td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary no_pad" id="btn_1" value="Runtime">Runtime</button>
+                            <button type="button" class="btn btn-primary" id="btn_1" value="Runtime"> Runtime </button>
                         </td>
                     </thead>     
                 </table>
             </div>
 
-            <div id="div4" style="background-color: #cce"></div>
+            <div class="well" id="div4"></div>
         
         </div>
          <script  src="{{url_for('static', filename='myscript.js')}}"></script>

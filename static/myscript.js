@@ -1,7 +1,7 @@
 var genreOnDemand = "CONSOLIDATED";
 
 function show_buttons() {
-    console.log("Show Task2 Called");
+    //console.log("Show Task2 Called");
     var divToShowTop10 = document.getElementById('top10');
     var divToShowMid10 = document.getElementById('mid10');
     var divToShowBottom10 = document.getElementById('bottom10');
@@ -12,7 +12,7 @@ function show_buttons() {
 }
 
 function hide_buttons() {
-    console.log("Show Task3 Called");
+    //console.log("Show Task3 Called");
     var divToShowTop10 = document.getElementById('top10');
     var divToShowMid10 = document.getElementById('mid10');
     var divToShowBottom10 = document.getElementById('bottom10');
@@ -42,7 +42,7 @@ callBottom10.onclick = function() {
 };
 
 function draw_circularBiPlotConsolidated(data, divID) {
-    var margin = {top: 190, right: 0, bottom: 0, left: 220},
+    var margin = {top: 175, right: 0, bottom: 0, left: 220},
     width = 460 - margin.left - margin.right,
     height = 460 - margin.top - margin.bottom,
     innerRadius = 90,
@@ -70,7 +70,7 @@ function draw_circularBiPlotConsolidated(data, divID) {
         var max = max_budget;
     }
 
-    console.log(max_budget + " " + max_revenue + " " + max);
+    //console.log(max_budget + " " + max_revenue + " " + max);
 
     var x = d3.scaleBand()
       .range([0, 2 * Math.PI])    // X axis goes from 0 to 2pi = all around the circle. If I stop at 1Pi, it will be around a half circle
@@ -162,8 +162,8 @@ function draw_circularBiPlotConsolidated(data, divID) {
         .on("mousedown", function(d, i,) {
             genreOnDemand = d.genre;
             
-            console.log("genreOnDemand is:");
-            console.log(genreOnDemand);
+            //console.log("genreOnDemand is:");
+            //console.log(genreOnDemand);
         
             driver_circularBiPlot("/drawCircularBiPlot/top10/" + d.genre, "SPECIFIC", divID);
             driver_radarChart("/drawRadarChart/" + d.genre, "SPECIFIC", "chart_1_radarChart");
@@ -199,19 +199,19 @@ function draw_circularBiPlotConsolidated(data, divID) {
 
 
 function draw_circularBiPlotSpecific(data, divID) {
-    var margin = {top: 225, right: 0, bottom: 0, left: 220},
+    var margin = {top: 215, right: 0, bottom: 0, left: 220},
     width = 500 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom,
     innerRadius = 90,
     outerRadius = Math.min(width, height) / 2;
 
-	console.log("On button click")
-    console.log(data)
+	//console.log("On button click")
+    //console.log(data)
     var max_revenue = d3.max(data, function(d) { return d.revenue; });
     var max_budget = d3.max(data, function(d) { return d.budget; });
     d3.select("#circularBiPlot").remove();
     
-    console.log(margin.left, margin.right, margin.top, margin.bottom, width, height);
+    //console.log(margin.left, margin.right, margin.top, margin.bottom, width, height);
     
     var svg = d3.select("#"+divID)
             .append("svg")
@@ -233,7 +233,7 @@ function draw_circularBiPlotSpecific(data, divID) {
         var max = max_budget;
     }
 
-    console.log(max_budget + " " + max_revenue + " " + max);
+    //console.log(max_budget + " " + max_revenue + " " + max);
     var y = d3.scaleRadial()
       .range([innerRadius, outerRadius])   // Domain will be define later.
       .domain([0, max]); // Domain of Y is from 0 to the max seen in the data
@@ -340,7 +340,7 @@ function driver_circularBiPlot(endPointAddr, tag, divID) {
         headers:{},
         success:function(result) {
           	var data = JSON.parse(result)
-            console.log(data)
+            //console.log(data)
             if(tag == "CONSOLIDATED")
                 draw_circularBiPlotConsolidated(data, divID);
             else {
@@ -694,7 +694,7 @@ function draw_radarChartConsolidated(data, divID) {
         return svg;
     } //RadarChart function closed
 
-    var margin = { top: 30, right: 80, bottom: 50, left: 80 },
+    var margin = { top: 22, right: 80, bottom: 50, left: 80 },
                 width = 300 //Math.min(700, window.innerWidth / 4) - margin.left - margin.right,
                 height = 300//Math.min(width, window.innerHeight - margin.top - margin.bottom);
 
@@ -769,13 +769,13 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     
     // set the dimensions and margins of the graph
     d3.select('#chart'+divId).remove();
-    var margin = {top: 5, right: 20, bottom: 107, left: 60},
+    var margin = {top: 45, right: 20, bottom: 107, left: 60},
     width = 500 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;    
+    height = 450 - margin.top - margin.bottom;    
   
     var barWidth = 30;
     var div = "#"+divId;
-    console.log(div)
+    //console.log(div)
 
     // Generate five 100 count, normal distributions with random means
     var listGroupCounts = JSON.parse(dictData);
@@ -805,9 +805,9 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
 
     // Setup a color scale for filling each box
     var colorScale = d3.scaleOrdinal()
-    .domain(['2011', '2012', '2013', '2014','2015'])
-    // .domain(Object.keys(groupCounts).sort())
-    .range(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd"]);//,"#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]);
+        .domain(['2011', '2012', '2013', '2014','2015'])
+        // .domain(Object.keys(groupCounts).sort())
+        .range(["#d62728","#ff7f0e","#2ca02c","#1f77b4","#9467bd"]);//,"#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]);
 
     // Prepare the data for the box plots
     var boxPlotData = [];
@@ -821,7 +821,7 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     obj["quartile"] = boxQuartiles(groupCount);
     obj["whiskers"] = [localMin, localMax];
     obj["color"] = colorScale(key);
-    // console.log(obj);
+    // //console.log(obj);
     boxPlotData.push(obj);
     }
 
@@ -873,8 +873,8 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
 
     // tooltip mouseover event handler
     var tipMouseover = function(d) {
-        // console.log("MOuseOver")
-        // console.log(d)
+        // //console.log("MOuseOver")
+        // //console.log(d)
         var html  = "<b>Min. " + d.whiskers[0] + "</b><br/>"+  
                     "<b> Median " + d.quartile[1] + "</b><br/>"+
                     "<b/> Max. " + d.whiskers[1] + "</b>";
@@ -969,7 +969,7 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     svg.append("text")             
       .attr("transform",
             "translate(" + (width/2) + " ," + 
-                           (height + margin.top + 25) + ")")
+                           (height + margin.top - 15) + ")")
       .style("text-anchor", "middle")
       .text("Years");
 
@@ -981,6 +981,7 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
     svg.append("g")
     .call(d3.axisLeft(yScale));
 
+    /*
     svg.append("text")
       .attr("transform", "rotate(-90)")
       .attr("y", -30)
@@ -988,7 +989,15 @@ function draw_box_plot(dictData, feature_num, chartTitle, divId) {
       .attr("dy", "1.5em")
       .style("text-anchor", "middle")
       .text(feature_map.get(feature_num)); 
-        
+    */
+
+    svg.append("text")
+        .attr("class", "axis_label")
+        .attr("text-anchor", "middle")
+        .attr("transform", "translate("+ (10) +","+(height/2)+")rotate(-90)")
+        .text(feature_map.get(feature_num))
+        .style("font-size", "14px");  
+
     function boxQuartiles(d) {
         return [
         d3.quantile(d, .25),
@@ -1029,7 +1038,7 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
     
 
     var div = "#"+divId;
-    console.log(div)
+    //console.log(div)
     var svg = d3.select(div).append("svg").attr('id', 'parallel'+divId)
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom);
@@ -1046,7 +1055,7 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
     years_list = Array.from(years_set);
     var colorScale = d3.scaleOrdinal()
     .domain(['2011', '2012', '2013', '2014','2015'])
-    .range(["#1f77b4","#ff7f0e","#2ca02c","#d62728","#9467bd"]);//,"#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]);
+    .range(["#d62728","#ff7f0e","#2ca02c","#1f77b4","#9467bd"]);//,"#8c564b","#e377c2","#7f7f7f","#bcbd22","#17becf"]);
 
     // var colorScale = d3.scaleOrdinal(d3.schemeCategory10)
     // .domain(years_list);
@@ -1071,8 +1080,8 @@ function draw_parallel_plot(dfData, chartTitle,divId) {
 
     // tooltip mouseover event handler
     var tipMouseover = function(d) {
-        // console.log("MOuseOver")
-        console.log(d)
+        // //console.log("MOuseOver")
+        //console.log(d)
         var html  =  "<b>" + d.name+ "</b>";
 
         tooltip.html(html)
@@ -1205,35 +1214,35 @@ function draw_scatter_2d(dfData, chartTitle,divId,isBrush='0') {
     }
     // var data = JSON.parse(dfData);
     
-    var margin = {top: 40, right: 40, bottom: 20, left: 30},
+    var margin = {top: 85, right: 40, bottom: 20, left: 30},
     width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    height = 450 - margin.top - margin.bottom;
 
-var x = d3.scaleLinear()
-    .range([40, width]);
+    var x = d3.scaleLinear()
+        .range([40, width]);
 
-var y = d3.scaleLinear()
-    .range([height-30, 0]);
+    var y = d3.scaleLinear()
+        .range([height-30, 0]);
 
-var color = d3.scaleOrdinal()
-.domain([1,2,3])
-.range(['#b41f2d','#ffa70e','#1b9e51'])
+    var color = d3.scaleOrdinal()
+    .domain([1,2,3])
+    .range(['#b41f2d','#ffa70e','#1b9e51'])
 
-var naming = d3.scaleOrdinal()
-.domain([1,2,3])
-.range(['Least','Mid-range','Best'])
+    var naming = d3.scaleOrdinal()
+    .domain([1,2,3])
+    .range(['Least','Mid-range','Best'])
 
-var xAxis = d3.axisBottom(x);
+    var xAxis = d3.axisBottom(x);
 
-var yAxis = d3.axisLeft(y);
+    var yAxis = d3.axisLeft(y);
 
-var div = "#"+divId
-console.log(div)
-var svg = d3.select(div).append("svg").attr('id', 'chart'+divId)
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    var div = "#"+divId
+    //console.log(div)
+    var svg = d3.select(div).append("svg").attr('id', 'chart'+divId)
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 
   data.forEach(function(d) {
@@ -1300,7 +1309,7 @@ var svg = d3.select(div).append("svg").attr('id', 'chart'+divId)
       .data(color.domain().reverse())
     .enter().append("g")
       .attr("class", "legend")
-      .attr("transform", function(d, i) { return "translate(0," + i * 20 + ")"; });
+      .attr("transform", function(d, i) { return "translate(0," + i * 15 + ")"; });
 
   legend.append("rect")
       .attr("x", width - 18)
